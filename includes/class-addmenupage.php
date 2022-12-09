@@ -22,6 +22,8 @@ class AddMenuPage {
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'email_crons_register_admin' ) );
+		// add_action( 'admin_notices', array( $this, 'sample_admin_notice__success' ) );
+		// add_action( 'admin_notices', array( $this, 'sample_admin_notice__error' ) );
 	}
 
 	/**
@@ -40,15 +42,15 @@ class AddMenuPage {
 			2
 		);
 
-		// $GLOBALS['emsc-email-test'] = add_submenu_page(
-		// 'emsc-template.php',
-		// 'Email Test',
-		// 'Email Test',
-		// 'manage_options',
-		// 'emsc-email-test.php',
-		// array( $this, 'emsc_testing_content' ),
-		// 'dashicons-share-alt2',
-		// );
+		$GLOBALS['email-crons-users'] = add_submenu_page(
+			'email-crons.php',
+			'Users',
+			'Users',
+			'manage_options',
+			'email-crons.php&tab=users',
+			array( $this, 'email_crons_template' ),
+			'dashicons-share-alt2',
+		);
 	}
 
 	/**
@@ -107,7 +109,37 @@ class AddMenuPage {
 	 * @since 1.0.0
 	 */
 	public function email_crons_email_template_tab_callback() {
-		echo 'here';
+		?>
+			<h3>Write Your E-mail Template</h3>
+		<?php
+		$content            = '';
+		$custom_editor_id   = 'email_crons_email_template_editor';
+		$custom_editor_name = 'email_crons_email_template_editor_name';
+		$args               = array(
+			'media_buttons' => false,
+			'textarea_name' => $custom_editor_name,
+			'textarea_rows' => get_option( 'default_post_edit_rows', 10 ),
+			'quicktags'     => true,
+		);
+		wp_editor( $content, $custom_editor_id, $args );
+
+		submit_button( __( 'Save Template', 'email-crons' ) );
+
+	}
+
+	public function sample_admin_notice__success() {
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><?php _e( 'Done!', 'sample-text-domain' ); ?></p>
+		</div>
+		<?php
+	}
+
+	public function sample_admin_notice__error() {
+		$class   = 'notice notice-error';
+		$message = __( 'Irks! An error has occurred.', 'sample-text-domain' );
+
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 	}
 
 }
