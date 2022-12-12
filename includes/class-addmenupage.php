@@ -11,6 +11,9 @@
 
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
+require 'tabs/class-savetemplate.php';
+require 'tabs/class-emailtest.php';
+
 /**
  * AddMenuPage class
  *
@@ -22,7 +25,7 @@ class AddMenuPage {
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'email_crons_register_admin' ) );
-		add_action( 'admin_post_nds_form_response', array( $this, 'the_form_response' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'email_crons_register_scripts' ) );
 	}
 
 	/**
@@ -40,27 +43,27 @@ class AddMenuPage {
 			'dashicons-clock',
 			2
 		);
+	}
 
-		$GLOBALS['email-crons-users'] = add_submenu_page(
-			'email-crons.php',
-			'Email Test',
-			'Email Test',
-			'manage_options',
-			'email-crons.php&tab=email-test',
-			array( $this, 'email_crons_template' ),
-			'dashicons-share-alt2',
-		);
-
-		$GLOBALS['email-crons-users'] = add_submenu_page(
-			'email-crons.php',
-			'Users',
-			'Users',
-			'manage_options',
-			'email-crons.php&tab=users',
-			array( $this, 'email_crons_template' ),
-			'dashicons-share-alt2',
-		);
-
+	/**
+	 * Funtion register admin menu page.
+	 *
+	 * @param string $hook global parameter.
+	 *
+	 * @since 1.0.0
+	 */
+	public function email_crons_register_scripts( $hook ) {
+		if ( $GLOBALS['email-crons-template'] === $hook ) {
+			wp_enqueue_style( 'email-crons-style', plugin_dir_url( __DIR__ ) . 'assets/css/style.css', '', '1.0', '', );
+			wp_enqueue_script( 'email-crons-script', plugin_dir_url( __DIR__ ) . 'assets/js/script.js', '', '1.0', true );
+			wp_localize_script(
+				'email-crons-script',
+				'localize_variable',
+				array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+				)
+			);
+		}
 	}
 
 	/**
@@ -107,87 +110,18 @@ class AddMenuPage {
 						echo 'users';
 						break;
 					case 'email-test':
-						echo 'email-test';
+						$email_test = new EmailTest();
+						$email_test->email_test_callback();
 						break;
 					default:
-						$this->email_crons_email_template_tab_callback();
+						$save_templage = new SaveTemplate();
+						$save_templage->email_crons_email_template_tab_callback();
 						break;
 				endswitch;
 				?>
 			</div>
 		</div>
 		<?php
-
-	}
-
-	/**
-	 * Function email template tab callback.
-	 *
-	 * @since 1.0.0
-	 */
-	public function email_crons_email_template_tab_callback() {
-		?>
-			<!-- <h3>Write Your E-mail Template</h3> -->
-		<?php
-
-		if ( 'updated' === get_transient( 'updated_option' ) ) {
-			?>
-				<div class="notice notice-success is-dismissible">
-					<p><?php echo esc_attr( 'Template saved!' ); ?></p>
-				</div>
-			<?php
-			delete_transient( 'updated_option' );
-		}
-		if ( get_transient( 'update_fail' ) ) {
-			?>
-			<div class="notice notice-error">
-				<p><?php echo esc_attr( 'An error has occurred' ); ?></p>
-			</div>
-			<?php
-			delete_transient( 'update_fail' );
-		}
-		$content            = get_option( 'email_crons_email_template_editor_name' );
-		$custom_editor_id   = 'email_crons_email_template_editor';
-		$custom_editor_name = 'email_crons_email_template_editor_name';
-		$args               = array(
-			'media_buttons' => false,
-			'textarea_name' => $custom_editor_name,
-			'textarea_rows' => get_option( 'default_post_edit_rows', 10 ),
-			'quicktags'     => true,
-		);
-		$nds_add_meta_nonce = wp_create_nonce( 'nds_add_user_meta_form_nonce' );
-
-		?>
-		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
-			<input type="hidden" name="action" value="nds_form_response">
-			<input type="hidden" name="nds_add_user_meta_nonce" value="<?php echo esc_attr( $nds_add_meta_nonce ); ?>" />			
-			<?php
-				wp_editor( $content, $custom_editor_id, $args );
-				submit_button( __( 'Save Template', 'email-crons' ) );
-			?>
-		</form>
-		<?php
-	}
-
-
-	/**
-	 * Function the_form_response callback.
-	 *
-	 * @since 1.0.0
-	 */
-	public function the_form_response() {
-		if ( isset( $_POST['nds_add_user_meta_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['nds_add_user_meta_nonce'] ), 'nds_add_user_meta_form_nonce' ) ) { //phpcs:ignore
-			$content = isset( $_POST['email_crons_email_template_editor_name'] ) ? wp_kses_post( wp_unslash( $_POST['email_crons_email_template_editor_name'] ) ) : '';
-			update_option( 'email_crons_email_template_editor_name', $content );
-			set_transient( 'updated_option', 'updated', 10 );
-			wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php' ) );
-			die();
-		} else {
-			set_transient( 'update_fail', 'fail', 10 );
-			wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php' ) );
-			die();
-			// wp_die( 'Invalid nonce specified' );
-		}
 	}
 }
 
