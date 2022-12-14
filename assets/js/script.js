@@ -23,6 +23,7 @@
     });
 
     $("#email_crons_users").select2();
+    $("#email_crons_roles").select2();
 
     $("#email_crons_select_all").click(function () {
       if ($("#email_crons_select_all").is(":checked")) {
