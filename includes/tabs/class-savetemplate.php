@@ -65,6 +65,7 @@ class SaveTemplate {
 		$nds_add_meta_nonce = wp_create_nonce( 'email_crons_save_template_nonce_value' );
 
 		?>
+		<p>This is where you create your email template.</p>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
 			<h2>Subject</h2>
 				<input name="email_crons_email_subject" class="email_crons_subject" id="email" value="<?php echo esc_attr( $subject ); ?>"  tabindex="2" type="text" placeholder="Enter subject">

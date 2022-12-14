@@ -34,6 +34,7 @@ class EmailTest {
 			<div class="test_message notice">
 				<p></p>
 			</div>
+			<p>Test the email response by adding your email address here.</p>
 			<form class="emailForm">
 				<table class="form-table email-crons-email-test" role="presentation">
 					<tbody>

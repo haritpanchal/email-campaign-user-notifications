@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || die( 'Access denied!' );
 
 require 'tabs/class-savetemplate.php';
 require 'tabs/class-emailtest.php';
+require 'tabs/class-usersselection.php';
 
 /**
  * AddMenuPage class
@@ -55,7 +56,9 @@ class AddMenuPage {
 	public function email_crons_register_scripts( $hook ) {
 		if ( $GLOBALS['email-crons-template'] === $hook ) {
 			wp_enqueue_style( 'email-crons-style', plugin_dir_url( __DIR__ ) . 'assets/css/style.css', '', '1.0', '', );
+			wp_enqueue_style( 'email-crons-select2-style', plugin_dir_url( __DIR__ ) . 'assets/css/select2.min.css', '', '4.0.13', '', );
 			wp_enqueue_script( 'email-crons-script', plugin_dir_url( __DIR__ ) . 'assets/js/script.js', '', '1.0', true );
+			wp_enqueue_script( 'email-crons-select2-script', plugin_dir_url( __DIR__ ) . 'assets/js/select2.min.js', '', '4.0.13', true );
 			wp_localize_script(
 				'email-crons-script',
 				'localize_variable',
@@ -93,21 +96,30 @@ class AddMenuPage {
 			$email_test = 'nav-tab-active';
 		}
 
+		if ( 'cron-settings' === $tab ) {
+			$cron_settings = 'nav-tab-active';
+		}
+
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 			<nav class="nav-tab-wrapper">
 				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>" class="nav-tab <?php echo esc_attr( $default ); ?>">Email Template</a>
+				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=users" class="nav-tab <?php echo esc_attr( $users ); ?>">Users Selection</a>
+				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=cron-settings" class="nav-tab <?php echo esc_attr( $cron_settings ); ?>">Cron Settings</a>
 				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=email-test" class="nav-tab <?php echo esc_attr( $email_test ); ?>">Email Test</a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=users" class="nav-tab <?php echo esc_attr( $users ); ?>">Users</a>
 			</nav>
 
 			<div class="tab-content">
 				<?php
 				switch ( $tab ) :
 					case 'users':
-						echo 'users';
+						$users_selection = new UsersSelection();
+						$users_selection->users_selection_callback();
+						break;
+					case 'cron-settings':
+						echo 'crons';
 						break;
 					case 'email-test':
 						$email_test = new EmailTest();
