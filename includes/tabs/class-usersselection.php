@@ -33,13 +33,12 @@ class UsersSelection {
 		global $wp_roles;
 		$user_roles              = array_keys( $wp_roles->roles );
 		$email_crons_users_nonce = wp_create_nonce( 'email_crons_save_users_nonce_value' );
-		$all_users               = get_users();
-		$selected_users          = get_option( 'email_crons_users_chunk', true ) ? get_option( 'email_crons_users_chunk', true ) : '';
 		$selected_roles          = get_option( 'email_crons_roles_chunk', true ) ? get_option( 'email_crons_roles_chunk', true ) : '';
+		$selected_users          = get_option( 'email_crons_users_chunk', true ) ? get_option( 'email_crons_users_chunk', true ) : '';
 		$selected_users_count    = is_array( $selected_users ) ? count( $selected_users ) : '';
+		$all_users               = ! isset( $selected_roles ) ? get_users() : get_users( array( 'role__in' => $selected_roles ) );
 		$all_users_id            = array_column( $all_users, 'user_login' );
 		$select_all_checked      = count( $all_users_id ) === $selected_users_count ? 'checked' : '';
-
 		?>
 		<p>Select the users to whom you want to send your mail template.</p>
 			<div>
@@ -76,11 +75,11 @@ class UsersSelection {
 										$user_email           = $user->data->user_email;
 										$selected_users_label = ( '' !== $selected_users ) ? ( in_array( $user_id, $selected_users, true ) ? 'selected' : '' ) : '';
 										?>
-												<option value="<?php echo esc_attr( $user_id ); ?>" <?php echo esc_attr( $selected_users_label ); ?>>
-											<?php
-											echo esc_attr( $user_name ) . '(' . esc_attr( $user_email ) . ')';
-											?>
-												</option>
+											<option value="<?php echo esc_attr( $user_id ); ?>" <?php echo esc_attr( $selected_users_label ); ?>>
+												<?php
+												echo esc_attr( $user_name ) . '(' . esc_attr( $user_email ) . ')';
+												?>
+											</option>
 											<?php
 									}
 									?>
@@ -104,7 +103,7 @@ class UsersSelection {
 	 */
 	public function email_crons_save_users_callback() {
 		if ( isset( $_POST['email_crons_users_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_users_nonce'] ), 'email_crons_save_users_nonce_value' ) ) { //phpcs:ignore
-			$users = isset( $_POST['email_crons_users'] ) ? $_POST['email_crons_users'] : ''; //phpcs:ignore
+		$users = isset( $_POST['email_crons_users'] ) ? $_POST['email_crons_users'] : ''; //phpcs:ignore
 			$roles = isset( $_POST['email_crons_roles'] ) ? $_POST['email_crons_roles'] : ''; //phpcs:ignore
 			update_option( 'email_crons_users_chunk', $users );
 			update_option( 'email_crons_roles_chunk', $roles );
