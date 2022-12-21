@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || die( 'Access denied!' );
 require 'tabs/class-savetemplate.php';
 require 'tabs/class-emailtest.php';
 require 'tabs/class-usersselection.php';
+require 'tabs/class-cronssettings.php';
 
 /**
  * AddMenuPage class
@@ -119,7 +120,8 @@ class AddMenuPage {
 						$users_selection->users_selection_callback();
 						break;
 					case 'cron-settings':
-						echo 'crons';
+						$crons_settings = new CronsSettings();
+						$crons_settings->crons_settings_callback();
 						break;
 					case 'email-test':
 						$email_test = new EmailTest();

@@ -43,24 +43,6 @@
       });
     });
 
-    $("#email_crons_roles").on("change", function () {
-      $("#email_crons_users").val(null).trigger("change");
-      $("#email_crons_select_all").prop("checked", false);
-      var roles = $("#email_crons_roles").select2("val");
-
-      jQuery.ajax({
-        url: localize_variable.ajax_url,
-        type: "POST",
-        data: {
-          action: "email_crons_change_users",
-          roles: roles,
-        },
-        success: function (response) {
-          $("#email_crons_users").empty().append(response);
-        },
-      });
-    });
-
     $("#email_crons_select_all").click(function () {
       if ($("#email_crons_select_all").is(":checked")) {
         $("#email_crons_users > option").prop("selected", "selected");

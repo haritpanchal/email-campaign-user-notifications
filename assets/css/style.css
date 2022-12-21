@@ -1,7 +1,7 @@
 .email_crons_subject {
   width: 100% !important;
 }
-.email-crons-email-test th {
-  width: 10%;
+.email-crons-email-test th, .email-crons-every-cron-time th {
+  width: 13%;
 }
 .test_message{ display: none;}
