@@ -15,6 +15,7 @@ require 'tabs/class-savetemplate.php';
 require 'tabs/class-emailtest.php';
 require 'tabs/class-usersselection.php';
 require 'tabs/class-cronssettings.php';
+require 'settings/class-sendemail.php';
 
 /**
  * AddMenuPage class

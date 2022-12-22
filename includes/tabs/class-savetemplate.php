@@ -56,11 +56,13 @@ class SaveTemplate {
 		$custom_editor_name = 'email_crons_email_template_editor_name';
 
 		$args               = array(
-			'media_buttons' => false,
-			'textarea_name' => $custom_editor_name,
-			'editor_height' => 500,
-			'textarea_rows' => $content,
-			'quicktags'     => true,
+			'default_editor' => 'tinymce',
+			'media_buttons'  => true,
+			'textarea_name'  => $custom_editor_name,
+			'editor_height'  => 500,
+			'textarea_rows'  => $content,
+			'quicktags'      => true,
+			'tinymce'        => true,
 		);
 		$nds_add_meta_nonce = wp_create_nonce( 'email_crons_save_template_nonce_value' );
 

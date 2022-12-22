@@ -1,7 +1,28 @@
 .email_crons_subject {
   width: 100% !important;
 }
-.email-crons-email-test th, .email-crons-every-cron-time th {
+.email-crons-email-test th,
+.email-crons-every-cron-time th {
   width: 13%;
 }
-.test_message{ display: none;}
+.test_message {
+  display: none;
+}
+p.start_sending_email {
+  text-align: left;
+  max-width: 100%;
+  margin-top: 20px;
+  padding-top: 10px;
+}
+.email_crons_flex {
+  display: flex;
+}
+
+.start_sending_email{
+  margin-left: 20px;
+}
+.start_sending_email input{
+  background: green!important;
+  border-color: green!important;
+  color: white!important;
+}

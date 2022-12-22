@@ -21,7 +21,7 @@
     //   });
     // }
 
-    $("#email_crons_sent_test_email").click(function () {
+    $("#email_crons_sent_test_email").on("click", function () {
       var test_email = $("#email_crons_test_email").val();
       jQuery.ajax({
         url: localize_variable.ajax_url,
@@ -42,15 +42,18 @@
         },
       });
     });
-
-    $("#email_crons_select_all").click(function () {
-      if ($("#email_crons_select_all").is(":checked")) {
-        $("#email_crons_users > option").prop("selected", "selected");
-        $("#email_crons_users").trigger("change");
-      } else {
-        $("#email_crons_users > option").removeAttr("selected");
-        $("#email_crons_users").trigger("change");
-      }
-    });
+    
+    $("#start_sending_email_button").on("click", function () {
+      jQuery.ajax({
+        url: localize_variable.ajax_url,
+        type: "POST",
+        data: {
+          action: "schedule_cron",
+        },
+        success: function (response) {
+          console.log('sucees');
+        },
+      });
+    })
   });
 })(jQuery);
