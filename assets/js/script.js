@@ -30,6 +30,9 @@
           action: "send_test_email_action",
           email: test_email,
         },
+        beforeSend:function(){
+          jQuery(".test_message").hide();
+        },
         success: function (response) {
           jQuery(".test_message").show();
           // console.log(response);
@@ -39,10 +42,14 @@
           } else {
             jQuery(".test_message").addClass("notice-error");
           }
+
+          setTimeout(function () {
+            jQuery(".test_message").hide();
+          }, 5000);
         },
       });
     });
-    
+
     $("#start_sending_email_button").on("click", function () {
       jQuery.ajax({
         url: localize_variable.ajax_url,
@@ -50,10 +57,24 @@
         data: {
           action: "schedule_cron",
         },
+        beforeSend:function(){
+          jQuery(".cron_settings_message").hide();
+        },
         success: function (response) {
-          console.log('sucees');
+          jQuery(".cron_settings_message").show();
+
+          jQuery(".cron_settings_message p").text(response.data.message);
+          if (response.success === true) {
+            jQuery(".cron_settings_message").addClass("notice-success");
+          } else {
+            jQuery(".cron_settings_message").addClass("notice-error");
+          }
+
+          setTimeout(function () {
+            jQuery(".cron_settings_message").hide();
+          }, 5000);
         },
       });
-    })
+    });
   });
 })(jQuery);

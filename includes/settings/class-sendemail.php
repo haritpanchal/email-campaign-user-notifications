@@ -54,33 +54,36 @@ class SendEmail {
 	 * @since 1.0.0
 	 */
 	public function email_crons_schedule_cron() {
-		// $bulk_user_id     = get_transient( 'bulk_user_email' );
-		// $bulk_email_track = get_transient( 'bulk_email_track' );
+		$email_crons_bulk_users                 = get_transient( 'email_crons_bulk_user_email' );
+		$email_crons_bulk_users_track           = get_transient( 'email_crons_bulk_users_track' );
+		$email_crons_user_chunk_count           = get_option( 'email_crons_user_chunk' ) ? get_option( 'email_crons_user_chunk' ) : '';
+		$email_crons_email_subject              = get_option( 'email_crons_email_subject' ) ? get_option( 'email_crons_email_subject' ) : '';
+		$email_crons_email_template_editor_name = get_option( 'email_crons_email_template_editor_name' ) ? get_option( 'email_crons_email_template_editor_name' ) : '';
 
-		// $custom_mail_content = html_entity_decode( get_option( 'email_content' ) );
+		$query_info = new WP_User_Query( array( 'include' => $email_crons_bulk_users ) );
+		$users_info = $query_info->results;
 
-		// $query_info = new WP_User_Query( array( 'include' => $bulk_user_id ) );
-		// $users_info = $query_info->results;
+		if ( ! empty( $users_info ) ) {
+			$ary_chunk = array_chunk( $users_info, $email_crons_user_chunk_count );
+			$end_key   = array_key_last( $ary_chunk[ $email_crons_bulk_users_track ] );
 
-		// if ( ! empty( $users_info ) ) {
-		// 	$ary_chunk = array_chunk( $users_info, 3 );
-		// 	$end_key   = array_key_last( $ary_chunk[ $bulk_email_track ] );
+			foreach ( $ary_chunk[ $email_crons_bulk_users_track ] as $key => $info ) {
+				$email_subject = str_replace( ' %%USER%%', $info->display_name, $email_crons_email_subject );
+				wp_mail( $info->user_email, $email_subject, $email_crons_email_template_editor_name );
 
-		// 	foreach ( $ary_chunk[ $bulk_email_track ] as $key => $info ) {
-		// 		$email_body = str_replace( '%User%', $info->display_name, $custom_mail_content );
-		// 		wp_mail( $info->user_email, 'Testing', $email_body );
+				if ( $key == $end_key ) {
+					set_transient( 'email_crons_bulk_users_track', $email_crons_bulk_users_track + 1, 60 * 60 * 24 );
+				}
+			}
 
-		// 		if ( $key == $end_key ) {
-		// 			set_transient( 'bulk_email_track', $bulk_email_track + 1, 60 * 60 * 24 );
-		// 		}
-		// 	}
-
-		// 	if ( ! array_key_exists( $bulk_email_track + 1, $ary_chunk ) ) {
-		// 		wp_clear_scheduled_hook( 'custom_send_email' );
-		// 	}
-		// } else {
-		// 	wp_clear_scheduled_hook( 'custom_send_email' );
-		// }
+			if ( ! array_key_exists( $email_crons_bulk_users_track + 1, $ary_chunk ) ) {
+				wp_clear_scheduled_hook( 'email_crons_call_email_template' );
+				delete_transient( 'email_crons_bulk_users_track' );
+				delete_transient( 'email_crons_bulk_users_track' );
+			}
+		} else {
+			wp_clear_scheduled_hook( 'email_crons_call_email_template' );
+		}
 	}
 
 	/**
@@ -89,20 +92,22 @@ class SendEmail {
 	 * @since 1.0.0
 	 */
 	public function email_crons_schedule_cron_callback() {
-		$all_users = get_users();
-		$user_info = array();
-		$count     = 0;
-		foreach ( $all_users as $user_info ) {
-			$user_info      = esc_html( $user_info->ID );
-			$data[ $count ] = $user_info;
-			$count++;
-		}
-		// set_transient( 'bulk_user_email', $data, 60 * 60 * 24 );
-		// set_transient( 'bulk_email_track', 0, 60 * 60 * 24 );
+		$selected_roles = get_option( 'email_crons_roles_chunk', true ) ? get_option( 'email_crons_roles_chunk', true ) : '';
+		$all_users      = get_users( array( 'role__in' => $selected_roles ) );
+		$users_chunk    = array_column( $all_users, 'ID' );
 
-		// if ( ! wp_next_scheduled( 'email_crons_call_email_template' ) ) {
-		// 	wp_schedule_event( time(), 'email_crons_handler', 'email_crons_call_email_template' );
-		// }
+		set_transient( 'email_crons_bulk_user_email', $users_chunk, 60 * 60 * 24 );
+		set_transient( 'email_crons_bulk_users_track', 0, 60 * 60 * 24 );
+
+		$json_response = array();
+		if ( ! wp_next_scheduled( 'email_crons_call_email_template' ) ) {
+			$json_response['message'] = 'Success. Email scheduling has started.';
+			// wp_schedule_event( time(), 'email_crons_handler', 'email_crons_call_email_template' );
+			wp_send_json_success( $json_response, 200 );
+		} else {
+			$json_response['message'] = 'Something wrong.';
+			wp_send_json_error( $json_response, 504 );
+		}
 	}
 }
 

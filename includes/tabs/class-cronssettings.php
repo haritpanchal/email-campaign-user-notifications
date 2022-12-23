@@ -34,6 +34,9 @@ class CronsSettings {
 		$every_cron_time                 = get_option( 'email_crons_every_cron_time', true ) ? get_option( 'email_crons_every_cron_time', true ) : '';
 		$user_chunk                      = get_option( 'email_crons_user_chunk', true ) ? get_option( 'email_crons_user_chunk', true ) : '';
 		?>
+		<div class="cron_settings_message notice">
+			<p></p>
+		</div>
 		<p>Select the crons settings here.</p>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="emailForm" class="emailForm">
 			<table class="form-table email-crons-every-cron-time" role="presentation">

@@ -33,11 +33,6 @@ class UsersSelection {
 		$user_roles              = array_keys( $wp_roles->roles );
 		$email_crons_users_nonce = wp_create_nonce( 'email_crons_save_users_nonce_value' );
 		$selected_roles          = get_option( 'email_crons_roles_chunk', true ) ? get_option( 'email_crons_roles_chunk', true ) : '';
-		$selected_users          = get_option( 'email_crons_users_chunk', true ) ? get_option( 'email_crons_users_chunk', true ) : '';
-		$selected_users_count    = is_array( $selected_users ) ? count( $selected_users ) : '';
-		$all_users               = ! isset( $selected_roles ) ? get_users() : get_users( array( 'role__in' => $selected_roles ) );
-		$all_users_id            = array_column( $all_users, 'user_login' );
-		$select_all_checked      = count( $all_users_id ) === $selected_users_count ? 'checked' : '';
 		?>
 		<p>Select the users to whom you want to send your mail template.</p>
 			<div>
