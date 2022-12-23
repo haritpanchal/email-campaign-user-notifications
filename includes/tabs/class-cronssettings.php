@@ -31,12 +31,25 @@ class CronsSettings {
 	 */
 	public function crons_settings_callback() {
 		$email_crons_save_settings_nonce = wp_create_nonce( 'email_crons_save_settings_nonce_value' );
-		$every_cron_time                 = get_option( 'email_crons_every_cron_time', true ) ? get_option( 'email_crons_every_cron_time', true ) : '';
-		$user_chunk                      = get_option( 'email_crons_user_chunk', true ) ? get_option( 'email_crons_user_chunk', true ) : '';
+		$every_cron_time                 = get_option( 'email_crons_every_cron_time', true ) ? get_option( 'email_crons_every_cron_time', true ) : '60';
+		$user_chunk                      = get_option( 'email_crons_user_chunk', true ) ? get_option( 'email_crons_user_chunk', true ) : '5';
+		if ( 'cron_setting_update_success' === get_transient( 'cron_setting_update_success' ) ) {
+			?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong><?php echo esc_attr( 'Settings saved.' ); ?></strong></p>
+				</div>
+			<?php
+			delete_transient( 'cron_setting_update_success' );
+		}
+		if ( 'cron_setting_update_fail' === get_transient( 'cron_setting_update_fail' ) ) {
+			?>
+			<div class="notice notice-error">
+			<p><strong><?php echo esc_attr( 'Field(s) can not be empty.' ); ?></strong></p>
+			</div>
+			<?php
+			delete_transient( 'cron_setting_update_fail' );
+		}
 		?>
-		<div class="cron_settings_message notice">
-			<p></p>
-		</div>
 		<p>Select the crons settings here.</p>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="emailForm" class="emailForm">
 			<table class="form-table email-crons-every-cron-time" role="presentation">
@@ -61,9 +74,7 @@ class CronsSettings {
 				<?php
 					submit_button( __( 'Save Settings', 'email-crons' ) );
 				?>
-				<p class='start_sending_email'>
-					<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Start Sending Emails">
-				</p>
+				
 			</div>
 			<input type="hidden" name="action" value="email_crons_save_cron_settings">
 			<input type="hidden" name="email_crons_save_settings_nonce" value="<?php echo esc_attr( $email_crons_save_settings_nonce ); ?>" />	
@@ -85,6 +96,9 @@ class CronsSettings {
 			if ( ! empty( $every_cron_time ) && ! empty( $user_chunk ) ) {
 				update_option( 'email_crons_every_cron_time', $every_cron_time );
 				update_option( 'email_crons_user_chunk', $user_chunk );
+				set_transient( 'cron_setting_update_success', 'cron_setting_update_success' );
+			} else {
+				set_transient( 'cron_setting_update_fail', 'cron_setting_update_fail' );
 			}
 		}
 		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=cron-settings' ) );

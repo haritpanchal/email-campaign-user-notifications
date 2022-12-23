@@ -68,7 +68,7 @@ class SendEmail {
 			$end_key   = array_key_last( $ary_chunk[ $email_crons_bulk_users_track ] );
 
 			foreach ( $ary_chunk[ $email_crons_bulk_users_track ] as $key => $info ) {
-				$email_subject = str_replace( ' %%USER%%', $info->display_name, $email_crons_email_subject );
+				$email_subject = str_replace( '%%USER%%', $info->display_name, $email_crons_email_subject );
 				wp_mail( $info->user_email, $email_subject, $email_crons_email_template_editor_name );
 
 				if ( $key == $end_key ) {
@@ -102,7 +102,7 @@ class SendEmail {
 		$json_response = array();
 		if ( ! wp_next_scheduled( 'email_crons_call_email_template' ) ) {
 			$json_response['message'] = 'Success. Email scheduling has started.';
-			// wp_schedule_event( time(), 'email_crons_handler', 'email_crons_call_email_template' );
+			wp_schedule_event( time(), 'email_crons_handler', 'email_crons_call_email_template' );
 			wp_send_json_success( $json_response, 200 );
 		} else {
 			$json_response['message'] = 'Something wrong.';

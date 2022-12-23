@@ -36,7 +36,7 @@
         success: function (response) {
           jQuery(".test_message").show();
           // console.log(response);
-          jQuery(".test_message p").text(response.data.message);
+          jQuery(".test_message p strong").text(response.data.message);
           if (response.success === true) {
             jQuery(".test_message").addClass("notice-success");
           } else {

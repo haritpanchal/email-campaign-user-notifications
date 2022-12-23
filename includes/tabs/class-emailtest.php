@@ -32,7 +32,7 @@ class EmailTest {
 	public function email_test_callback() {
 		?>
 			<div class="test_message notice">
-				<p></p>
+				<p><strong></strong></p>
 			</div>
 			<p>Test the email response by adding your email address here.</p>
 			<form class="emailForm">

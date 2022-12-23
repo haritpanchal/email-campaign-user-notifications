@@ -33,6 +33,15 @@ class UsersSelection {
 		$user_roles              = array_keys( $wp_roles->roles );
 		$email_crons_users_nonce = wp_create_nonce( 'email_crons_save_users_nonce_value' );
 		$selected_roles          = get_option( 'email_crons_roles_chunk', true ) ? get_option( 'email_crons_roles_chunk', true ) : '';
+
+		if ( 'users_selection_update_success' === get_transient( 'users_selection_update_success' ) ) {
+			?>
+				<div class="notice notice-success is-dismissible">
+					<p><strong><?php echo esc_attr( 'Settings saved.' ); ?></strong></p>
+				</div>
+			<?php
+			delete_transient( 'users_selection_update_success' );
+		}
 		?>
 		<p>Select the users to whom you want to send your mail template.</p>
 			<div>
@@ -61,7 +70,7 @@ class UsersSelection {
 						</tbody>
 					</table>
 						<?php
-						submit_button( __( 'Save Users', 'email-crons' ) );
+						submit_button( __( 'Save Settings', 'email-crons' ) );
 						?>
 					<input type="hidden" name="action" value="email_crons_save_users">
 					<input type="hidden" name="email_crons_users_nonce" value="<?php echo esc_attr( $email_crons_users_nonce ); ?>" />			
@@ -77,6 +86,7 @@ class UsersSelection {
 		if ( isset( $_POST['email_crons_users_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_users_nonce'] ), 'email_crons_save_users_nonce_value' ) ) { //phpcs:ignore
 			$roles = isset( $_POST['email_crons_roles'] ) ? $_POST['email_crons_roles'] : ''; //phpcs:ignore
 			update_option( 'email_crons_roles_chunk', $roles );
+			set_transient( 'users_selection_update_success', 'users_selection_update_success' );
 		}
 		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=users' ) );
 		exit;

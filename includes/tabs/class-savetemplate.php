@@ -37,7 +37,7 @@ class SaveTemplate {
 		if ( 'update_success' === get_transient( 'update_success' ) ) {
 			?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php echo esc_attr( 'Template saved!' ); ?></p>
+					<p><strong><?php echo esc_attr( 'Template saved!' ); ?></strong></p>
 				</div>
 			<?php
 			delete_transient( 'update_success' );
@@ -59,7 +59,7 @@ class SaveTemplate {
 			'default_editor' => 'tinymce',
 			'media_buttons'  => true,
 			'textarea_name'  => $custom_editor_name,
-			'editor_height'  => 500,
+			'editor_height'  => 400,
 			'textarea_rows'  => $content,
 			'quicktags'      => true,
 			'tinymce'        => true,
@@ -67,18 +67,31 @@ class SaveTemplate {
 		$nds_add_meta_nonce = wp_create_nonce( 'email_crons_save_template_nonce_value' );
 
 		?>
-		<p>This is where you create your email template.</p>
-		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
-			<h2>Subject</h2>
-				<input name="email_crons_email_subject" class="email_crons_subject" id="email" value="<?php echo esc_attr( $subject ); ?>"  tabindex="2" type="text" placeholder="Enter subject">
-			<h2>Content</h2>
-			<?php
-				wp_editor( $content, $custom_editor_id, $args );
-				submit_button( __( 'Save Template', 'email-crons' ) );
-			?>
-			<input type="hidden" name="action" value="email_crons_save_template">
-			<input type="hidden" name="email_crons_template_nonce" value="<?php echo esc_attr( $nds_add_meta_nonce ); ?>" />			
-		</form>
+		<div class="cron_settings_message notice">
+			<p></p>
+		</div>
+		<div div class="email_crons_save_template_row">
+			<div class="email_crons_save_template_col">
+				<p>This is where you create your email template.</p>
+				<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
+					<h2>Subject</h2>
+						<input name="email_crons_email_subject" class="email_crons_subject" id="email" value="<?php echo esc_attr( $subject ); ?>"  tabindex="2" type="text" placeholder="Enter subject">
+			</div>
+			<div class="email_crons_save_template_col">
+				<p>Send this email template to all users according to <a href="admin.php?page=email-crons.php&tab=cron-settings">cron settings</a> tab.
+				<p class='start_sending_email'>
+					<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users">
+				</p>
+			</div>
+		</div>
+				<h2>Content</h2>
+				<?php
+					wp_editor( $content, $custom_editor_id, $args );
+					submit_button( __( 'Save Template', 'email-crons' ) );
+				?>
+				<input type="hidden" name="action" value="email_crons_save_template">
+				<input type="hidden" name="email_crons_template_nonce" value="<?php echo esc_attr( $nds_add_meta_nonce ); ?>" />			
+			</form>
 		<?php
 	}
 
