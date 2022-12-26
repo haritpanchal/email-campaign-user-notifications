@@ -72,7 +72,7 @@ class SendEmail {
 				$email_crons_email_template_editor_name = str_replace( '%USER%', $info->display_name, $email_crons_email_template_editor_name );
 				wp_mail( $info->user_email, $email_subject, $email_crons_email_template_editor_name );
 
-				if ( $key == $end_key ) {
+				if ( $key === $end_key ) {
 					set_transient( 'email_crons_bulk_users_track', $email_crons_bulk_users_track + 1, 60 * 60 * 24 );
 				}
 			}

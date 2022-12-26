@@ -74,7 +74,7 @@ class CronsSettings {
 				<?php
 					submit_button( __( 'Save Settings', 'email-crons' ) );
 				?>
-				
+
 			</div>
 			<input type="hidden" name="action" value="email_crons_save_cron_settings">
 			<input type="hidden" name="email_crons_save_settings_nonce" value="<?php echo esc_attr( $email_crons_save_settings_nonce ); ?>" />	
