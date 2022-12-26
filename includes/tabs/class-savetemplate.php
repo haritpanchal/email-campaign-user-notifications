@@ -111,10 +111,12 @@ class SaveTemplate {
 					<p class='start_sending_email'>
 						<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users" <?php echo esc_attr( $email_crons_progress_check_disabled ); ?>>
 						<?php if ( '1' === $email_crons_progress_check ) { ?>
-							<p class="description"><i>In Progress. Button will be disabled untill it is finished.<i/></p>
+							<p class="description"><i>In Progress. Button will be disabled untill it is finished.</i></p>
 						<?php } ?>
 					</p>
-					<p class="description">If used in template <i>%USER%</i> will be replaced by display name.</p>
+					<h2>Trivia</h2>
+					<p class="description"><strong>%USER% :</strong> Use this global variable anywhere( subject or content ) and it will get replaced according to user data( i.e firstname, secondname, email, etc) in final email.</p>
+					<hr>
 				</div>
 			</div>
 		<?php

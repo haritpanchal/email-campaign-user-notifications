@@ -1,6 +1,6 @@
 <?php
 /**
- * Email Crons
+ * User email campaign notifications
  *
  * @package           EmailCrons
  * @author            Harit Panchal
@@ -8,7 +8,7 @@
  * @license           GPL-2.0
  *
  * @wordpress-plugin
- * Plugin Name:       Email Crons
+ * Plugin Name:       User email campaign notifications
  * Description:       Description of the plugin.
  * Version:           1.0.0
  * Requires at least: 6.1
