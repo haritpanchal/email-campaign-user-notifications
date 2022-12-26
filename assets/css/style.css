@@ -8,12 +8,6 @@
 .test_message, .cron_settings_message {
   display: none;
 }
-p.start_sending_email {
-  text-align: left;
-  max-width: 100%;
-  margin-top: 20px;
-  padding-top: 30px;
-}
 .email_crons_flex {
   display: flex;
 }
@@ -23,5 +17,6 @@ p.start_sending_email {
   border-color: green!important;
   color: white!important;
 }
-.email_crons_save_template_col{width: 50%;}
-.email_crons_save_template_row{display: flex;}
+.email_crons_save_template_col.one{width: 65%;}
+.email_crons_save_template_col.two{width: 30%;}
+.email_crons_save_template_row{display: flex;justify-content: space-between;}

@@ -59,6 +59,28 @@ class SendEmail {
 		$email_crons_user_chunk_count           = get_option( 'email_crons_user_chunk' ) ? get_option( 'email_crons_user_chunk' ) : '';
 		$email_crons_email_subject              = get_option( 'email_crons_email_subject' ) ? get_option( 'email_crons_email_subject' ) : '';
 		$email_crons_email_template_editor_name = get_option( 'email_crons_email_template_editor_name' ) ? get_option( 'email_crons_email_template_editor_name' ) : '';
+		$customize_global_variable_options      = get_option( 'customize_global_variable_options' ) ? get_option( 'customize_global_variable_options' ) : '';
+
+		switch ( $customize_global_variable_options ) {
+			case 'email':
+				$option_value = 'user_email';
+				break;
+			case 'first':
+				$option_value = 'first_name';
+				break;
+			case 'second':
+				$option_value = 'second_name';
+				break;
+			case 'nickname':
+				$option_value = 'nickname';
+				break;
+			case 'display':
+				$option_value = 'display_name';
+				break;
+			default:
+				$option_value = 'display_name';
+				break;
+		}
 
 		$query_info = new WP_User_Query( array( 'include' => $email_crons_bulk_users ) );
 		$users_info = $query_info->results;
@@ -68,11 +90,12 @@ class SendEmail {
 			$end_key   = array_key_last( $ary_chunk[ $email_crons_bulk_users_track ] );
 
 			foreach ( $ary_chunk[ $email_crons_bulk_users_track ] as $key => $info ) {
-				$email_subject                          = str_replace( '%USER%', $info->display_name, $email_crons_email_subject );
-				$email_crons_email_template_editor_name = str_replace( '%USER%', $info->display_name, $email_crons_email_template_editor_name );
+				$username                               = $info->$option_value;
+				$email_subject                          = str_replace( '%USER%', $username, $email_crons_email_subject );
+				$email_crons_email_template_editor_name = str_replace( '%USER%', $username, $email_crons_email_template_editor_name );
 				wp_mail( $info->user_email, $email_subject, $email_crons_email_template_editor_name );
 
-				if ( $key === $end_key ) {
+				if ( $key == $end_key ) {
 					set_transient( 'email_crons_bulk_users_track', $email_crons_bulk_users_track + 1, 60 * 60 * 24 );
 				}
 			}
@@ -104,7 +127,6 @@ class SendEmail {
 		$json_response = array();
 		if ( ! wp_next_scheduled( 'email_crons_call_email_template' ) ) {
 			$json_response['message'] = 'Success. Email scheduling has started.';
-			$this->email_crons_schedule_cron();
 			wp_schedule_event( time(), 'email_crons_handler', 'email_crons_call_email_template' );
 			set_transient( 'email_crons_progress_check', true );
 			wp_send_json_success( $json_response, 200 );
