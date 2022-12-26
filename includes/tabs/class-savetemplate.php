@@ -55,7 +55,7 @@ class SaveTemplate {
 		$custom_editor_id   = 'email_crons_email_template_editor';
 		$custom_editor_name = 'email_crons_email_template_editor_name';
 
-		$args               = array(
+		$args                                = array(
 			'default_editor' => 'tinymce',
 			'media_buttons'  => true,
 			'textarea_name'  => $custom_editor_name,
@@ -64,26 +64,32 @@ class SaveTemplate {
 			'quicktags'      => true,
 			'tinymce'        => true,
 		);
-		$nds_add_meta_nonce = wp_create_nonce( 'email_crons_save_template_nonce_value' );
+		$nds_add_meta_nonce                  = wp_create_nonce( 'email_crons_save_template_nonce_value' );
+		$email_crons_progress_check          = get_transient( 'email_crons_progress_check' );
+		$email_crons_progress_check_disabled = get_transient( 'email_crons_progress_check' ) ? 'disabled' : '';
 
 		?>
-		<div class="cron_settings_message notice">
-			<p></p>
-		</div>
-		<div div class="email_crons_save_template_row">
-			<div class="email_crons_save_template_col">
-				<p>This is where you create your email template.</p>
-				<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
-					<h2>Subject</h2>
-						<input name="email_crons_email_subject" class="email_crons_subject" id="email" value="<?php echo esc_attr( $subject ); ?>"  tabindex="2" type="text" placeholder="Enter subject">
+			<div class="cron_settings_message notice">
+				<p></p>
 			</div>
-			<div class="email_crons_save_template_col">
-				<p>Send this email template to all users according to <a href="admin.php?page=email-crons.php&tab=cron-settings">cron settings</a> tab.
-				<p class='start_sending_email'>
-					<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users">
-				</p>
+			<div div class="email_crons_save_template_row">
+				<div class="email_crons_save_template_col">
+					<p>This is where you create your email template.</p>
+					<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
+						<h2>Subject</h2>
+							<input name="email_crons_email_subject" class="email_crons_subject" id="email" value="<?php echo esc_attr( $subject ); ?>"  tabindex="2" type="text" placeholder="Enter subject">
+				</div>
+				<div class="email_crons_save_template_col">
+					<p>Send this email template to all users according to <a href="admin.php?page=email-crons.php&tab=cron-settings">cron settings</a> tab.
+					<p class='start_sending_email'>
+						<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users" <?php echo esc_attr( $email_crons_progress_check_disabled ); ?>>
+						<?php if ( '1' === $email_crons_progress_check ) { ?>
+							<p class="description"><i>In Progress. Button will be disabled untill it is finished.<i/></p>
+						<?php } ?>
+					</p>
+				</div>
 			</div>
-		</div>
+			<p class="description">If used in template <i>%USER%</i> will be replaced by display name.</p>
 				<h2>Content</h2>
 				<?php
 					wp_editor( $content, $custom_editor_id, $args );

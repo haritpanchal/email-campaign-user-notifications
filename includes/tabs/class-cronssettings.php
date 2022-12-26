@@ -58,14 +58,14 @@ class CronsSettings {
 						<th scope="row"><label for="every_cron_time">Organize every email (in seconds)</label></th>
 						<td>
 							<input type="number" name="every_cron_time" min="1"	placeholder="60 seconds" value="<?php echo esc_attr( $every_cron_time ); ?>" />
-							<p class="description" id="home-description"><i>Enter the number of time in seconds at what duration you want to organize sending mails<i/></p>
+							<p class="description"><i>Enter the number of time in seconds at what duration you want to organize sending mails<i/></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="user_chunk">Organize users</label></th>
 						<td>
 							<input type="number" name="user_chunk" min="1"	placeholder="5 users" value="<?php echo esc_attr( $user_chunk ); ?>" />
-							<p class="description" id="home-description"><i>Enter the number users you want to schedule sending mails at once<i/></p>
+							<p class="description"><i>Enter the number users you want to schedule sending mails at once<i/></p>
 						</td>
 					</tr>
 				<tbody>

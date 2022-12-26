@@ -40,7 +40,7 @@ class EmailTest {
 					<tbody>
 						<tr>
 							<th scope="row"><label for="email_crons_test_email">Test Email:</label></th>
-							<td><input name="email_crons_test_email" type="text" id="email_crons_test_email" value="" placeholder="Enter test email" class="regular-text"></td>
+							<td><input name="email_crons_test_email" type="text" id="email_crons_test_email"  placeholder="Enter test email" class="regular-text"></td>
 						</tr>
 					<tbody>
 				</table>
@@ -79,7 +79,7 @@ class EmailTest {
 		} else {
 			$json_response = array(
 				'status'  => $send_test_mail,
-				'message' => 'Something wrong with your SMTP settings.',
+				'message' => 'Something wrong with Email/SMTP settings.',
 			);
 			wp_send_json_error( $json_response, 200 );
 		}
