@@ -34,12 +34,12 @@ class EmailTest {
 			<div class="test_message notice">
 				<p><strong></strong></p>
 			</div>
-			<p>Test the email response by adding your email address here.</p>
+			<p><?php echo esc_html( 'Test the email response by adding your email address here.' ); ?></p>
 			<form class="emailForm">
 				<table class="form-table email-crons-email-test" role="presentation">
 					<tbody>
 						<tr>
-							<th scope="row"><label for="email_crons_test_email">Test Email:</label></th>
+							<th scope="row"><label for="email_crons_test_email"><?php echo esc_html( 'Test Email:' ); ?></label></th>
 							<td><input name="email_crons_test_email" type="text" id="email_crons_test_email"  placeholder="Enter test email" class="regular-text"></td>
 						</tr>
 					<tbody>
@@ -69,19 +69,19 @@ class EmailTest {
 		if ( ! empty( $recipient ) && ( true === $send_test_mail ) ) {
 			$json_response = array(
 				'status'  => $send_test_mail,
-				'message' => 'Test mail has been sent successfully.',
+				'message' => __( 'Test mail has been sent successfully.', 'email-crons' ),
 			);
 			wp_send_json_success( $json_response, 200 );
 		} elseif ( empty( $recipient ) && ( false === $send_test_mail ) ) {
 			$json_response = array(
 				'status'  => $send_test_mail,
-				'message' => 'Email field can not be empty.',
+				'message' => __( 'Email field can not be empty.', 'email-crons' ),
 			);
 			wp_send_json_error( $json_response, 200 );
 		} else {
 			$json_response = array(
 				'status'  => $send_test_mail,
-				'message' => 'Something wrong with Email/SMTP settings.',
+				'message' => __( 'Something wrong with Email/SMTP settings.', 'email-crons' ),
 			);
 			wp_send_json_error( $json_response, 200 );
 		}

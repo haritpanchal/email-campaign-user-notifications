@@ -30,14 +30,11 @@ class SaveTemplate {
 	 * @since 1.0.0
 	 */
 	public function email_crons_email_template_tab_callback() {
-		?>
-			<!-- <h3>Write Your E-mail Template</h3> -->
-		<?php
 
 		if ( 'update_success' === get_transient( 'update_success' ) ) {
 			?>
 				<div class="notice notice-success is-dismissible">
-					<p><strong><?php echo esc_attr( 'Template saved!' ); ?></strong></p>
+					<p><strong><?php echo esc_html( 'Template saved!' ); ?></strong></p>
 				</div>
 			<?php
 			delete_transient( 'update_success' );
@@ -45,7 +42,7 @@ class SaveTemplate {
 		if ( 'update_fail' === get_transient( 'update_fail' ) ) {
 			?>
 			<div class="notice notice-error">
-				<p><?php echo esc_attr( 'An error has occurred' ); ?></p>
+				<p><?php echo esc_html( 'An error has occurred' ); ?></p>
 			</div>
 			<?php
 			delete_transient( 'update_fail' );
@@ -80,25 +77,25 @@ class SaveTemplate {
 			<div class="email_crons_save_template_row">
 				<div class="email_crons_save_template_col one">
 					<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
-						<h2>Subject</h2>
+						<h2><?php echo esc_html( 'Subject' ); ?></h2>
 						<input name="email_crons_email_subject" class="email_crons_subject" id="email" value="<?php echo esc_attr( $subject ); ?>"  tabindex="2" type="text" placeholder="Enter subject">
 
-						<h2>Content</h2>
+						<h2><?php echo esc_html( 'Content' ); ?></h2>
 						<?php wp_editor( $content, $custom_editor_id, $args ); ?>
 						<p id="customize_variable_preview"><label for="customize_variable_preview"><input name="customize_variable_preview" type="checkbox" id="customize_variable_preview" <?php echo esc_attr( $customize_variable_preview_check ); ?>>
-							Customize %USER% with different values.</label>
+							<?php echo esc_html( 'Customize %USER% with different values.' ); ?></label>
 						</p>
 						<?php
 						if ( $customize_variable_preview_check ) :
 							?>
 							<select name="customize_global_variable_options" id="customize_global_variable_options">
-								<option value="email" <?php echo ( 'email' === $customize_global_variable_options ) ? 'selected' : ''; ?>>Email address</option>
-								<option value="first" <?php echo ( 'first' === $customize_global_variable_options ) ? 'selected' : ''; ?>>First name</option>
-								<option value="second" <?php echo ( 'second' === $customize_global_variable_options ) ? 'selected' : ''; ?>>Second name</option>
-								<option value="nickname" <?php echo ( 'nickname' === $customize_global_variable_options ) ? 'selected' : ''; ?>>Nickname</option>
-								<option value="display" <?php echo ( 'display' === $customize_global_variable_options ) ? 'selected' : ''; ?>>Display name</option>
+								<option value="email" <?php echo ( 'email' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Email address' ); ?></option>
+								<option value="first" <?php echo ( 'first' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'First name' ); ?></option>
+								<option value="second" <?php echo ( 'second' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Second name' ); ?></option>
+								<option value="nickname" <?php echo ( 'nickname' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Nickname' ); ?></option>
+								<option value="display" <?php echo ( 'display' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Display name' ); ?></option>
 							</select>
-							<p class="description">Choose any one value which will replace <i>%USER%</i>.</p>
+							<p class="description"><?php echo wp_kses_post( 'Choose any one value which will replace <i>%USER%</i>.' ); ?></p>
 							<?php
 							endif;
 						?>
@@ -108,18 +105,18 @@ class SaveTemplate {
 					</form>
 				</div>
 				<div  class="email_crons_save_template_col two">
-					<h2>Start Campaign</h2>
-					<p>Send this email template to all users according to <a href="admin.php?page=email-crons.php&tab=cron-settings">cron settings</a> tab.
+					<h2><?php echo esc_html( 'Start Campaign' ); ?></h2>
+					<p><?php echo esc_html( 'Send this email template to all users according to' ); ?> <a href="admin.php?page=email-crons.php&tab=cron-settings"><?php echo esc_html( 'cron settings' ); ?></a> <?php echo esc_html( 'tab.' ); ?>
 					<p class='start_sending_email'>
 						<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users" <?php echo esc_attr( $email_crons_progress_check_disabled ); ?>>
 						<?php if ( '1' === $email_crons_progress_check ) { ?>
-							<p class="description in_progress"><strong>In Progress. Can not start another campaign until this one is finished.</strong></p>
+							<p class="description in_progress"><strong><?php echo esc_html( 'In Progress. Can not start another campaign until this one is finished.' ); ?></strong></p>
 						<?php } ?>
-						<p class="description"><strong>CARFUL:</strong> Please double-check the subject and template before pressing this button, since the campaign will start and all recipients will receive an email.</p>
+						<p class="description"><?php echo wp_kses_post( '<strong>CARFUL:</strong> Please double-check the subject and template before pressing this button, since the campaign will start and all recipients will receive an email.' ); ?></p>
 					</p>
 					<hr/>
-					<h2>Trivia</h2>
-					<p class="description trivia"><strong>%USER% :</strong> This global variable can be used anywhere (subject or content) and it will be replaced with the user's data (first name, second name, email, etc). <br/><a href="#customize_variable_preview">Check this.</a></p>
+					<h2><?php echo esc_html( 'Trivia' ); ?></h2>
+					<p class="description trivia"><?php echo wp_kses_post( "<strong>%USER% :</strong> This global variable can be used anywhere (subject or content) and it will be replaced with the user's data (first name, second name, email, etc). " ); ?><br/><a href="#customize_variable_preview"><?php echo esc_html( 'Check this.' ); ?></a></p>
 					<hr>
 				</div>
 			</div>
@@ -139,15 +136,15 @@ class SaveTemplate {
 			$customize_global_variable_options = isset( $_POST['customize_global_variable_options'] ) ? wp_kses_post( wp_unslash( $_POST['customize_global_variable_options'] ) ) : '';
 			$customize_variable_preview = isset( $_POST['customize_variable_preview'] ) ? $_POST['customize_variable_preview'] : ''; //phpcs:ignore
 			if ( ! empty( $subject ) ) {
-				update_option( 'email_crons_email_subject', $subject );
+				update_option( 'email_crons_email_subject', esc_attr( $subject ) );
 			}
 			if ( ! empty( $content ) ) {
-				update_option( 'email_crons_email_template_editor_name', $content );
+				update_option( 'email_crons_email_template_editor_name', esc_attr( $content ) );
 			}
 			if ( ! empty( $customize_global_variable_options ) ) {
-				update_option( 'customize_global_variable_options', $customize_global_variable_options );
+				update_option( 'customize_global_variable_options', esc_attr( $customize_global_variable_options ) );
 			}
-			update_option( 'customize_variable_preview', $customize_variable_preview );
+			update_option( 'customize_variable_preview', esc_attr( $customize_variable_preview ) );
 			set_transient( 'update_success', 'update_success' );
 		} else {
 			set_transient( 'update_error', 'update_error' );

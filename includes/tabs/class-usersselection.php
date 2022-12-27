@@ -43,9 +43,9 @@ class UsersSelection {
 			delete_transient( 'users_selection_update_success' );
 		}
 		?>
-		<p>Users with selected roles will be part of an email campaign.</p>
+		<p><?php echo esc_html( 'Users with selected roles will be part of an email campaign.' ); ?></p>
 			<div>
-				<label>Select role(s):</label></br>
+				<label><?php echo esc_html( 'Select role(s):' ); ?></label>
 			</div>
 			<div>
 				<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="email_crons_save_users_form"> 

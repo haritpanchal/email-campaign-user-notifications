@@ -55,17 +55,17 @@ class CronsSettings {
 			<table class="form-table email-crons-every-cron-time" role="presentation">
 				<tbody>
 					<tr>
-						<th scope="row"><label for="every_cron_time">Organize every email (in seconds)</label></th>
+						<th scope="row"><label for="every_cron_time"><?php echo esc_html( 'Organize every email (in seconds)' ); ?></label></th>
 						<td>
 							<input type="number" name="every_cron_time" min="1"	placeholder="60 seconds" value="<?php echo esc_attr( $every_cron_time ); ?>" />
-							<p class="description"><i>Enter the number of time in seconds at what duration you want to organize sending mails<i/></p>
+							<p class="description"><i><?php echo esc_html( 'Enter the number of time in seconds at what duration you want to organize sending mails' ); ?><i/></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row"><label for="user_chunk">Organize users</label></th>
 						<td>
 							<input type="number" name="user_chunk" min="1"	placeholder="5 users" value="<?php echo esc_attr( $user_chunk ); ?>" />
-							<p class="description"><i>Enter the number users you want to schedule sending mails at once<i/></p>
+							<p class="description"><i><?php echo esc_html( 'Enter the number users you want to schedule sending mails at once' ); ?><i/></p>
 						</td>
 					</tr>
 				<tbody>
@@ -94,8 +94,8 @@ class CronsSettings {
 			$user_chunk = isset( $_POST['user_chunk'] ) ? $_POST['user_chunk'] : ''; //phpcs:ignore
 
 			if ( ! empty( $every_cron_time ) && ! empty( $user_chunk ) ) {
-				update_option( 'email_crons_every_cron_time', $every_cron_time );
-				update_option( 'email_crons_user_chunk', $user_chunk );
+				update_option( 'email_crons_every_cron_time', esc_attr( $every_cron_time ) );
+				update_option( 'email_crons_user_chunk', esc_attr( $user_chunk ) );
 				set_transient( 'cron_setting_update_success', 'cron_setting_update_success' );
 			} else {
 				set_transient( 'cron_setting_update_fail', 'cron_setting_update_fail' );

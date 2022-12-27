@@ -38,7 +38,7 @@ class AddMenuPage {
 	 */
 	public function email_crons_register_admin() {
 		$GLOBALS['email-crons-template'] = add_menu_page(
-			'User Email Campaign Notifications',
+			'Email Campaign User Notifications',
 			'Email Campaign',
 			'manage_options',
 			'email-crons.php',
@@ -107,10 +107,10 @@ class AddMenuPage {
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 			<nav class="nav-tab-wrapper">
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>" class="nav-tab <?php echo esc_attr( $default ); ?>">Email Template</a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=users" class="nav-tab <?php echo esc_attr( $users ); ?>">Users Selection</a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=cron-settings" class="nav-tab <?php echo esc_attr( $cron_settings ); ?>">Cron Settings</a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=email-test" class="nav-tab <?php echo esc_attr( $email_test ); ?>">Email Test</a>
+				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>" class="nav-tab <?php echo esc_attr( $default ); ?>"><?php echo esc_html( 'Email Template' ); ?></a>
+				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=users" class="nav-tab <?php echo esc_attr( $users ); ?>"><?php echo esc_html( 'Users Selection' ); ?></a>
+				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=cron-settings" class="nav-tab <?php echo esc_attr( $cron_settings ); ?>"><?php echo esc_html( 'Cron Settings' ); ?></a>
+				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=email-test" class="nav-tab <?php echo esc_attr( $email_test ); ?>"><?php echo esc_html( 'Test Email ' ); ?></a>
 			</nav>
 
 			<div class="tab-content">

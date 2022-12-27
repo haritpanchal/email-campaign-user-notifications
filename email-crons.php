@@ -1,6 +1,6 @@
 <?php
 /**
- * User Email Campaign Notifications
+ * Email Campaign User Notifications
  *
  * @package           EmailCrons
  * @author            Harit Panchal
@@ -8,7 +8,7 @@
  * @license           GPL-2.0
  *
  * @wordpress-plugin
- * Plugin Name:       User Email Campaign Notifications
+ * Plugin Name:       Email Campaign User Notifications
  * Description:       Description of the plugin.
  * Version:           1.0.0
  * Requires at least: 6.1
@@ -49,8 +49,8 @@ function email_crons_activate_callback() {
 		delete_option( 'Activated_Plugin' );
 	} else {
 		add_option( 'Activated_Plugin', 'emial-crons' );
-		update_option( 'default_subject', $default_subject );
-		update_option( 'default_template', $default_template );
+		update_option( 'default_subject', esc_attr( $default_subject ) );
+		update_option( 'default_template', wp_kses_post( $default_template ) );
 	}
 	flush_rewrite_rules();
 }
