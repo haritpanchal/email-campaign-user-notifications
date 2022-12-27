@@ -38,7 +38,7 @@ class AddMenuPage {
 	 */
 	public function email_crons_register_admin() {
 		$GLOBALS['email-crons-template'] = add_menu_page(
-			'Email Campaign',
+			'User Email Campaign Notifications',
 			'Email Campaign',
 			'manage_options',
 			'email-crons.php',

@@ -50,8 +50,10 @@ class SaveTemplate {
 			<?php
 			delete_transient( 'update_fail' );
 		}
-		$subject                           = get_option( 'email_crons_email_subject' ) ? get_option( 'email_crons_email_subject' ) : '';
-		$content                           = get_option( 'email_crons_email_template_editor_name' ) ? get_option( 'email_crons_email_template_editor_name' ) : '';
+		$default_subject                   = get_option( 'default_subject' );
+		$default_template                  = get_option( 'default_template' );
+		$subject                           = get_option( 'email_crons_email_subject' ) ? get_option( 'email_crons_email_subject' ) : $default_subject;
+		$content                           = get_option( 'email_crons_email_template_editor_name' ) ? get_option( 'email_crons_email_template_editor_name' ) : $default_template;
 		$customize_variable_preview_check  = get_option( 'customize_variable_preview' ) ? 'checked' : '';
 		$customize_global_variable_options = get_option( 'customize_global_variable_options' ) ? get_option( 'customize_global_variable_options' ) : '';
 		$custom_editor_id                  = 'email_crons_email_template_editor';
@@ -74,7 +76,7 @@ class SaveTemplate {
 			<div class="cron_settings_message notice">
 				<p></p>
 			</div>
-			<p>This is where you create your email template.</p>
+			<p>Create your email template here.</p>
 			<div class="email_crons_save_template_row">
 				<div class="email_crons_save_template_col one">
 					<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="nds_add_user_meta_form"> 
@@ -83,7 +85,7 @@ class SaveTemplate {
 
 						<h2>Content</h2>
 						<?php wp_editor( $content, $custom_editor_id, $args ); ?>
-						<p><label for="customize_variable_preview"><input name="customize_variable_preview" type="checkbox" id="customize_variable_preview" <?php echo esc_attr( $customize_variable_preview_check ); ?>>
+						<p id="customize_variable_preview"><label for="customize_variable_preview"><input name="customize_variable_preview" type="checkbox" id="customize_variable_preview" <?php echo esc_attr( $customize_variable_preview_check ); ?>>
 							Customize %USER% with different values.</label>
 						</p>
 						<?php
@@ -111,11 +113,13 @@ class SaveTemplate {
 					<p class='start_sending_email'>
 						<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users" <?php echo esc_attr( $email_crons_progress_check_disabled ); ?>>
 						<?php if ( '1' === $email_crons_progress_check ) { ?>
-							<p class="description"><i>In Progress. Button will be disabled untill it is finished.</i></p>
+							<p class="description in_progress"><strong>In Progress. Can not start another campaign until this one is finished.</strong></p>
 						<?php } ?>
+						<p class="description"><strong>CARFUL:</strong> Please double-check the subject and template before pressing this button, since the campaign will start and all recipients will receive an email.</p>
 					</p>
+					<hr/>
 					<h2>Trivia</h2>
-					<p class="description"><strong>%USER% :</strong> Use this global variable anywhere( subject or content ) and it will get replaced according to user data( i.e firstname, secondname, email, etc) in final email.</p>
+					<p class="description trivia"><strong>%USER% :</strong> This global variable can be used anywhere (subject or content) and it will be replaced with the user's data (first name, second name, email, etc). <br/><a href="#customize_variable_preview">Check this.</a></p>
 					<hr>
 				</div>
 			</div>

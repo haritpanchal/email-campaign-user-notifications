@@ -59,6 +59,8 @@ class EmailTest {
 		$subject   = get_option( 'email_crons_email_subject' );
 		$message   = get_option( 'email_crons_email_template_editor_name' );
 		$headers   = array( 'Content-Type: text/html; charset=UTF-8' );
+		$subject   = str_replace( '%USER%', 'User', $subject );
+		$message   = str_replace( '%USER%', 'User', $message );
 
 		$send_test_mail = false;
 		$json_response  = array();

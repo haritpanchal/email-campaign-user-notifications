@@ -43,7 +43,7 @@ class UsersSelection {
 			delete_transient( 'users_selection_update_success' );
 		}
 		?>
-		<p>Select the users to whom you want to send your mail template.</p>
+		<p>Users with selected roles will be part of an email campaign.</p>
 			<div>
 				<label>Select role(s):</label></br>
 			</div>

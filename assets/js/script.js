@@ -72,7 +72,7 @@
           if (response.success === true) {
             jQuery(".cron_settings_message").addClass("notice-success");
             jQuery("#start_sending_email_button").after(
-              '<p class="description"><i>In Progress. Button will be disabled untill it is finished.<i/></p>'
+              '<p class="description in_progress"><strong>In Progress. Can not start another campaign until this one is finished.<strong/></p>'
             );
           } else {
             jQuery(".cron_settings_message").addClass("notice-error");
