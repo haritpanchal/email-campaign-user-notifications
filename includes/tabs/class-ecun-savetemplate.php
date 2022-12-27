@@ -3,8 +3,8 @@
  * Save template class file
  *
  * @category Plugin
- * @package  EmailCrons
- * @author   Infobeans <infobeans@infobeans.com>
+ * @package  Email Campaign User Notifications
+ * @author   Harit Panchal <https://profiles.wordpress.org/haritpanchal>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL Licence
  * @link     ''
  */
@@ -12,16 +12,16 @@
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
 /**
- * SaveTemplate class
+ * ECUN_SaveTemplate class
  *
  * @link     ''
  */
-class SaveTemplate {
+class ECUN_SaveTemplate {
 	/**
 	 * Construct function
 	 */
 	public function __construct() {
-		add_action( 'admin_post_email_crons_save_template', array( $this, 'email_crons_save_template_callback' ) );
+		add_action( 'admin_post_email_crons_save_template', array( $this, 'ecun_email_crons_save_template_callback' ) );
 	}
 
 	/**
@@ -29,7 +29,7 @@ class SaveTemplate {
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_email_template_tab_callback() {
+	public function ecun_email_crons_email_template_tab_callback() {
 
 		if ( 'update_success' === get_transient( 'update_success' ) ) {
 			?>
@@ -125,11 +125,11 @@ class SaveTemplate {
 
 
 	/**
-	 * Function email_crons_save_template_callback callback.
+	 * Function ecun_email_crons_save_template_callback callback.
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_save_template_callback() {
+	public function ecun_email_crons_save_template_callback() {
 		if ( isset( $_POST['email_crons_template_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_template_nonce'] ), 'email_crons_save_template_nonce_value' ) ) { //phpcs:ignore
 			$subject                           = isset( $_POST['email_crons_email_subject'] ) ? sanitize_text_field( wp_unslash( $_POST['email_crons_email_subject'] ) ) : '';
 			$content                           = isset( $_POST['email_crons_email_template_editor_name'] ) ? wp_kses_post( wp_unslash( $_POST['email_crons_email_template_editor_name'] ) ) : '';
@@ -139,7 +139,7 @@ class SaveTemplate {
 				update_option( 'email_crons_email_subject', esc_attr( $subject ) );
 			}
 			if ( ! empty( $content ) ) {
-				update_option( 'email_crons_email_template_editor_name', esc_attr( $content ) );
+				update_option( 'email_crons_email_template_editor_name', wp_kses_post( $content ) );
 			}
 			if ( ! empty( $customize_global_variable_options ) ) {
 				update_option( 'customize_global_variable_options', esc_attr( $customize_global_variable_options ) );
@@ -154,4 +154,4 @@ class SaveTemplate {
 	}
 }
 
-$save_template = new SaveTemplate();
+$save_template = new ECUN_SaveTemplate();

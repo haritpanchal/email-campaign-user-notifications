@@ -2,7 +2,7 @@
 /**
  * Email Campaign User Notifications
  *
- * @package           EmailCrons
+ * @package           Email Campaign User Notifications
  * @author            Harit Panchal
  * @copyright         2022 Harit Panchal
  * @license           GPL-2.0
@@ -22,12 +22,12 @@
 
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-addmenupage.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-ecun-addmenupage.php';
 
 /**
  * Function add or delete option on plugin activation or deactivation.
  */
-function email_crons_activate_callback() {
+function ecun_email_crons_activate_callback() {
 	$default_subject  = 'Welcome %USER%';
 	$default_template = '<table style="border: 15px solid #000; width: 70%; border-collapse: collapse; border-top-width: 7px; text-align: center; margin: auto; min-width: 320px; max-width: 600px;">
 							<tbody>
@@ -54,5 +54,5 @@ function email_crons_activate_callback() {
 	}
 	flush_rewrite_rules();
 }
-register_activation_hook( __FILE__, 'email_crons_activate_callback' );
-register_deactivation_hook( __FILE__, 'email_crons_activate_callback' );
+register_activation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
+register_deactivation_hook( __FILE__, 'ecun_email_crons_activate_callback' );

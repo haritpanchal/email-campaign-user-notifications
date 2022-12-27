@@ -50,6 +50,8 @@
 
           setTimeout(function () {
             jQuery(".test_message").hide();
+            jQuery(".test_message").removeClass("notice-success");
+            jQuery(".test_message").removeClass("notice-error");
           }, 5000);
         },
       });
@@ -80,6 +82,8 @@
 
           setTimeout(function () {
             jQuery(".cron_settings_message").hide();
+            jQuery(".cron_settings_message").removeClass("notice-error");
+            jQuery(".cron_settings_message").removeClass("notice-success");
           }, 5000);
         },
       });

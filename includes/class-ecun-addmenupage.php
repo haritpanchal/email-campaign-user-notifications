@@ -3,32 +3,32 @@
  * Add menu page class file
  *
  * @category Plugin
- * @package  EmailCrons
- * @author   Infobeans <infobeans@infobeans.com>
+ * @package  Email Campaign User Notifications
+ * @author   Harit Panchal <https://profiles.wordpress.org/haritpanchal>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL Licence
  * @link     ''
  */
 
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
-require 'tabs/class-savetemplate.php';
-require 'tabs/class-emailtest.php';
-require 'tabs/class-usersselection.php';
-require 'tabs/class-cronssettings.php';
-require 'settings/class-sendemail.php';
+require 'tabs/class-ecun-savetemplate.php';
+require 'tabs/class-ecun-emailtest.php';
+require 'tabs/class-ecun-usersselection.php';
+require 'tabs/class-ecun-cronssettings.php';
+require 'settings/class-ecun-sendemail.php';
 
 /**
- * AddMenuPage class
+ * ECUN_AddMenuPage class
  *
  * @link     ''
  */
-class AddMenuPage {
+class ECUN_AddMenuPage {
 	/**
 	 * Construct function
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'email_crons_register_admin' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'email_crons_register_scripts' ) );
+		add_action( 'admin_menu', array( $this, 'ecun_email_crons_register_admin' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'ecun_email_crons_register_scripts' ) );
 	}
 
 	/**
@@ -36,26 +36,26 @@ class AddMenuPage {
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_register_admin() {
+	public function ecun_email_crons_register_admin() {
 		$GLOBALS['email-crons-template'] = add_menu_page(
 			'Email Campaign User Notifications',
 			'Email Campaign',
 			'manage_options',
 			'email-crons.php',
-			array( $this, 'email_crons_template' ),
+			array( $this, 'ecun_email_crons_template' ),
 			'dashicons-clock',
 			2
 		);
 	}
 
 	/**
-	 * Funtion register admin menu page.
+	 * Funtion enqueue/register scripts.
 	 *
 	 * @param string $hook global parameter.
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_register_scripts( $hook ) {
+	public function ecun_email_crons_register_scripts( $hook ) {
 		if ( $GLOBALS['email-crons-template'] === $hook ) {
 			wp_enqueue_style( 'email-crons-style', plugin_dir_url( __DIR__ ) . 'assets/css/style.css', '', '1.0', '', );
 			wp_enqueue_style( 'email-crons-select2-style', plugin_dir_url( __DIR__ ) . 'assets/css/select2.min.css', '', '4.0.13', '', );
@@ -76,7 +76,7 @@ class AddMenuPage {
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_template() {
+	public function ecun_email_crons_template() {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -117,20 +117,20 @@ class AddMenuPage {
 				<?php
 				switch ( $tab ) :
 					case 'users':
-						$users_selection = new UsersSelection();
-						$users_selection->users_selection_callback();
+						$users_selection = new ECUN_UsersSelection();
+						$users_selection->ecun_users_selection_callback();
 						break;
 					case 'cron-settings':
-						$crons_settings = new CronsSettings();
-						$crons_settings->crons_settings_callback();
+						$crons_settings = new ECUN_CronsSettings();
+						$crons_settings->ecun_crons_settings_callback();
 						break;
 					case 'email-test':
-						$email_test = new EmailTest();
-						$email_test->email_test_callback();
+						$email_test = new ECUN_EmailTest();
+						$email_test->ecun_email_test_callback();
 						break;
 					default:
-						$save_templage = new SaveTemplate();
-						$save_templage->email_crons_email_template_tab_callback();
+						$save_templage = new ECUN_SaveTemplate();
+						$save_templage->ecun_email_crons_email_template_tab_callback();
 						break;
 				endswitch;
 				?>
@@ -140,4 +140,4 @@ class AddMenuPage {
 	}
 }
 
-$add_menu_page = new AddMenuPage();
+$add_menu_page = new ECUN_AddMenuPage();

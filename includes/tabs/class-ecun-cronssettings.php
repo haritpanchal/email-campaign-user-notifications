@@ -3,8 +3,8 @@
  * Crons setting class file
  *
  * @category Plugin
- * @package  EmailCrons
- * @author   Infobeans <infobeans@infobeans.com>
+ * @package  Email Campaign User Notifications
+ * @author   Harit Panchal <https://profiles.wordpress.org/haritpanchal>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL Licence
  * @link     ''
  */
@@ -16,12 +16,12 @@ defined( 'ABSPATH' ) || die( 'Access denied!' );
  *
  * @link     ''
  */
-class CronsSettings {
+class ECUN_CronsSettings {
 	/**
 	 * Construct function
 	 */
 	public function __construct() {
-		add_action( 'admin_post_email_crons_save_cron_settings', array( $this, 'email_crons_save_cron_settings_callback' ) );
+		add_action( 'admin_post_email_crons_save_cron_settings', array( $this, 'ecun_email_crons_save_cron_settings_callback' ) );
 	}
 
 	/**
@@ -29,7 +29,7 @@ class CronsSettings {
 	 *
 	 * @since 1.0.0
 	 */
-	public function crons_settings_callback() {
+	public function ecun_crons_settings_callback() {
 		$email_crons_save_settings_nonce = wp_create_nonce( 'email_crons_save_settings_nonce_value' );
 		$every_cron_time                 = get_option( 'email_crons_every_cron_time', true ) ? get_option( 'email_crons_every_cron_time', true ) : '60';
 		$user_chunk                      = get_option( 'email_crons_user_chunk', true ) ? get_option( 'email_crons_user_chunk', true ) : '5';
@@ -50,7 +50,7 @@ class CronsSettings {
 			delete_transient( 'cron_setting_update_fail' );
 		}
 		?>
-		<p>Select the crons settings here.</p>
+		<p><?php echo esc_html( 'Select the crons settings here.' ); ?></p>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" id="emailForm" class="emailForm">
 			<table class="form-table email-crons-every-cron-time" role="presentation">
 				<tbody>
@@ -87,7 +87,7 @@ class CronsSettings {
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_save_cron_settings_callback() {
+	public function ecun_email_crons_save_cron_settings_callback() {
 
 		if ( isset( $_POST['email_crons_save_settings_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_save_settings_nonce'] ), 'email_crons_save_settings_nonce_value' ) ) { //phpcs:ignore
 			$every_cron_time = isset( $_POST['every_cron_time'] ) ? $_POST['every_cron_time'] : ''; //phpcs:ignore
@@ -106,4 +106,4 @@ class CronsSettings {
 	}
 }
 
-$crons_settings = new CronsSettings();
+$crons_settings = new ECUN_CronsSettings();

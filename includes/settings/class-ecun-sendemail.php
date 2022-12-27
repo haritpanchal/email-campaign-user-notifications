@@ -3,8 +3,8 @@
  * Send email class file
  *
  * @category Plugin
- * @package  EmailCrons
- * @author   Infobeans <infobeans@infobeans.com>
+ * @package  Email Campaign User Notifications
+ * @author   Harit Panchal <https://profiles.wordpress.org/haritpanchal>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL Licence
  * @link     ''
  */
@@ -12,29 +12,29 @@
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
 /**
- * SendEmail class
+ * ECUN_SendEmail class
  *
  * @link     ''
  */
-class SendEmail {
+class ECUN_SendEmail {
 	/**
 	 * Construct function
 	 */
 	public function __construct() {
-		add_filter( 'cron_schedules', array( $this, 'email_crons_cron_schedules' ) ); //phpcs:ignore
-		add_action( 'email_crons_call_email_template', array( $this, 'email_crons_schedule_cron' ) );
-		add_action( 'wp_ajax_schedule_cron', array( $this, 'email_crons_schedule_cron_callback' ) );
+		add_filter( 'cron_schedules', array( $this, 'ecun_email_crons_cron_schedules' ) ); //phpcs:ignore
+		add_action( 'email_crons_call_email_template', array( $this, 'ecun_email_crons_schedule_cron' ) );
+		add_action( 'wp_ajax_schedule_cron', array( $this, 'ecun_email_crons_schedule_cron_callback' ) );
 
 	}
 
 	/**
-	 * Create cron timer of one minute
+	 * Create event for campaign.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param Array $schedules An array of non-default cron schedules.
 	 */
-	public function email_crons_cron_schedules( $schedules ) {
+	public function ecun_email_crons_cron_schedules( $schedules ) {
 		$email_crons_every_cron_time = get_option( 'email_crons_every_cron_time', 'email_crons' ) ? get_option( 'email_crons_every_cron_time', 'email_crons' ) : '';
 		$minutes                     = $email_crons_every_cron_time ? floor( $email_crons_every_cron_time / 60 ) : '';
 		$display_text                = ( ! empty( $minutes ) && $minutes < 1 ) ? 'Every ' . $email_crons_every_cron_time . ' Seconds' : 'Every ' . $minutes . ' Minutes';
@@ -49,11 +49,11 @@ class SendEmail {
 	}
 
 	/**
-	 * Create cron timer of one minute
+	 * Create cron schedule function.
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_schedule_cron() {
+	public function ecun_email_crons_schedule_cron() {
 		$email_crons_bulk_users                 = get_transient( 'email_crons_bulk_user_email' );
 		$email_crons_bulk_users_track           = get_transient( 'email_crons_bulk_users_track' );
 		$email_crons_user_chunk_count           = get_option( 'email_crons_user_chunk' ) ? get_option( 'email_crons_user_chunk' ) : '';
@@ -112,11 +112,11 @@ class SendEmail {
 	}
 
 	/**
-	 * Create cron timer of one minute
+	 * Create schedule cron callback function.
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_crons_schedule_cron_callback() {
+	public function ecun_email_crons_schedule_cron_callback() {
 		$selected_roles = get_option( 'email_crons_roles_chunk', true ) ? get_option( 'email_crons_roles_chunk', true ) : '';
 		$all_users      = get_users( array( 'role__in' => $selected_roles ) );
 		$users_chunk    = array_column( $all_users, 'ID' );
@@ -137,4 +137,4 @@ class SendEmail {
 	}
 }
 
-$send_email = new SendEmail();
+$send_email = new ECUN_SendEmail();

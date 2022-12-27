@@ -3,8 +3,8 @@
  * User selection class file
  *
  * @category Plugin
- * @package  EmailCrons
- * @author   Infobeans <infobeans@infobeans.com>
+ * @package  Email Campaign User Notifications
+ * @author   Harit Panchal <https://profiles.wordpress.org/haritpanchal>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL Licence
  * @link     ''
  */
@@ -12,23 +12,23 @@
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
 /**
- * UsersSelection class
+ * ECUN_UsersSelection class
  *
  * @link     ''
  */
-class UsersSelection {
+class ECUN_UsersSelection {
 
 	/**
 	 * Construct function
 	 */
 	public function __construct() {
-		add_action( 'admin_post_email_crons_save_users', array( $this, 'email_crons_save_users_callback' ) );
+		add_action( 'admin_post_email_crons_save_users', array( $this, 'ecun_email_crons_save_users_callback' ) );
 	}
 
 	/**
 	 * Users selection callback function
 	 */
-	public function users_selection_callback() {
+	public function ecun_users_selection_callback() {
 		global $wp_roles;
 		$user_roles              = array_keys( $wp_roles->roles );
 		$email_crons_users_nonce = wp_create_nonce( 'email_crons_save_users_nonce_value' );
@@ -82,7 +82,7 @@ class UsersSelection {
 	/**
 	 * Save users callback function
 	 */
-	public function email_crons_save_users_callback() {
+	public function ecun_email_crons_save_users_callback() {
 		if ( isset( $_POST['email_crons_users_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_users_nonce'] ), 'email_crons_save_users_nonce_value' ) ) { //phpcs:ignore
 			$roles = isset( $_POST['email_crons_roles'] ) ? $_POST['email_crons_roles'] : ''; //phpcs:ignore
 			update_option( 'email_crons_roles_chunk', $roles );
@@ -93,4 +93,4 @@ class UsersSelection {
 	}
 }
 
-$users_selection = new UsersSelection();
+$users_selection = new ECUN_UsersSelection();

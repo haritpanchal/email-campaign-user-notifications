@@ -3,8 +3,8 @@
  * Email test class file
  *
  * @category Plugin
- * @package  EmailCrons
- * @author   Infobeans <infobeans@infobeans.com>
+ * @package  Email Campaign User Notifications
+ * @author   Harit Panchal <https://profiles.wordpress.org/haritpanchal>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html GPL Licence
  * @link     ''
  */
@@ -12,24 +12,24 @@
 defined( 'ABSPATH' ) || die( 'Access denied!' );
 
 /**
- * EmailTest class
+ * ECUN_EmailTest class
  *
  * @link     ''
  */
-class EmailTest {
+class ECUN_EmailTest {
 	/**
 	 * Construct function
 	 */
 	public function __construct() {
-		add_action( 'wp_ajax_send_test_email_action', array( $this, 'send_test_email_action_callback' ) );
+		add_action( 'wp_ajax_send_test_email_action', array( $this, 'ecun_send_test_email_action_callback' ) );
 	}
 
 	/**
-	 * Funtion email test callback.
+	 * Funtion email test content.
 	 *
 	 * @since 1.0.0
 	 */
-	public function email_test_callback() {
+	public function ecun_email_test_callback() {
 		?>
 			<div class="test_message notice">
 				<p><strong></strong></p>
@@ -54,7 +54,7 @@ class EmailTest {
 	 *
 	 * @since 1.0.0
 	 */
-	public function send_test_email_action_callback() {
+	public function ecun_send_test_email_action_callback() {
 		$recipient = $_POST['email']; //phpcs:ignore
 		$subject   = get_option( 'email_crons_email_subject' );
 		$message   = get_option( 'email_crons_email_template_editor_name' );
@@ -89,4 +89,4 @@ class EmailTest {
 	}
 }
 
-$email_test = new EmailTest();
+$email_test = new ECUN_EmailTest();
