@@ -83,7 +83,7 @@ class ECUN_AddMenuPage {
 		}
 
 		$default_tab = null;
-		$tab         = isset( $_GET['tab'] ) ? $_GET['tab'] : $default_tab; //phpcs:ignore
+		$tab         = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : $default_tab; // phpcs:ignore
 		$screen      = get_current_screen();
 
 		$active_class = '';

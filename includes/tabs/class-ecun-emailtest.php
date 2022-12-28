@@ -55,7 +55,7 @@ class ECUN_EmailTest {
 	 * @since 1.0.0
 	 */
 	public function ecun_send_test_email_action_callback() {
-		$recipient = $_POST['email']; //phpcs:ignore
+		$recipient = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : ''; //phpcs:ignore
 		$subject   = get_option( 'email_crons_email_subject' );
 		$message   = get_option( 'email_crons_email_template_editor_name' );
 		$headers   = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -68,20 +68,20 @@ class ECUN_EmailTest {
 
 		if ( ! empty( $recipient ) && ( true === $send_test_mail ) ) {
 			$json_response = array(
-				'status'  => $send_test_mail,
+				'status'  => esc_attr( $send_test_mail ),
 				'message' => __( 'Test mail has been sent successfully.', 'email-crons' ),
 			);
 			wp_send_json_success( $json_response, 200 );
-		} elseif ( empty( $recipient ) && ( false === $send_test_mail ) ) {
+		} elseif ( empty( $recipient ) ) {
 			$json_response = array(
-				'status'  => $send_test_mail,
-				'message' => __( 'Email field can not be empty.', 'email-crons' ),
+				'status'  => esc_attr( $send_test_mail ),
+				'message' => __( 'Something wrong with email.', 'email-crons' ),
 			);
 			wp_send_json_error( $json_response, 200 );
 		} else {
 			$json_response = array(
-				'status'  => $send_test_mail,
-				'message' => __( 'Something wrong with Email/SMTP settings.', 'email-crons' ),
+				'status'  => esc_attr( $send_test_mail ),
+				'message' => __( 'Something wrong with SMTP settings.', 'email-crons' ),
 			);
 			wp_send_json_error( $json_response, 200 );
 		}

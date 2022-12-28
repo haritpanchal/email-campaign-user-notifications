@@ -89,9 +89,9 @@ class ECUN_CronsSettings {
 	 */
 	public function ecun_email_crons_save_cron_settings_callback() {
 
-		if ( isset( $_POST['email_crons_save_settings_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_save_settings_nonce'] ), 'email_crons_save_settings_nonce_value' ) ) { //phpcs:ignore
-			$every_cron_time = isset( $_POST['every_cron_time'] ) ? $_POST['every_cron_time'] : ''; //phpcs:ignore
-			$user_chunk = isset( $_POST['user_chunk'] ) ? $_POST['user_chunk'] : ''; //phpcs:ignore
+		if ( isset( $_POST['email_crons_save_settings_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['email_crons_save_settings_nonce'] ) ), 'email_crons_save_settings_nonce_value' ) ) {
+			$every_cron_time = isset( $_POST['every_cron_time'] ) ? sanitize_text_field( wp_unslash( $_POST['every_cron_time'] ) ) : '';
+			$user_chunk      = isset( $_POST['user_chunk'] ) ? sanitize_text_field( wp_unslash( $_POST['user_chunk'] ) ) : '';
 
 			if ( ! empty( $every_cron_time ) && ! empty( $user_chunk ) ) {
 				update_option( 'email_crons_every_cron_time', esc_attr( $every_cron_time ) );

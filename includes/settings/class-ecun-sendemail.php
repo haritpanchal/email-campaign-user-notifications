@@ -69,7 +69,7 @@ class ECUN_SendEmail {
 				$option_value = 'first_name';
 				break;
 			case 'second':
-				$option_value = 'second_name';
+				$option_value = 'last_name';
 				break;
 			case 'nickname':
 				$option_value = 'nickname';
@@ -84,7 +84,6 @@ class ECUN_SendEmail {
 
 		$query_info = new WP_User_Query( array( 'include' => $email_crons_bulk_users ) );
 		$users_info = $query_info->results;
-
 		if ( ! empty( $users_info ) ) {
 			$ary_chunk = array_chunk( $users_info, $email_crons_user_chunk_count );
 			$end_key   = array_key_last( $ary_chunk[ $email_crons_bulk_users_track ] );

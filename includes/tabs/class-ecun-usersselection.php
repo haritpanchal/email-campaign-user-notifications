@@ -83,9 +83,9 @@ class ECUN_UsersSelection {
 	 * Save users callback function
 	 */
 	public function ecun_email_crons_save_users_callback() {
-		if ( isset( $_POST['email_crons_users_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_users_nonce'] ), 'email_crons_save_users_nonce_value' ) ) { //phpcs:ignore
-			$roles = isset( $_POST['email_crons_roles'] ) ? $_POST['email_crons_roles'] : ''; //phpcs:ignore
-			update_option( 'email_crons_roles_chunk', $roles );
+		if ( isset( $_POST['email_crons_users_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['email_crons_users_nonce'] ) ), 'email_crons_save_users_nonce_value' ) ) {
+			$roles = isset( $_POST['email_crons_roles'] ) ? array_map( 'sanitize_key', wp_unslash( $_POST['email_crons_roles'] ) ) : '';
+			update_option( 'email_crons_roles_chunk', ( $roles ) );
 			set_transient( 'users_selection_update_success', 'users_selection_update_success' );
 		}
 		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=users' ) );

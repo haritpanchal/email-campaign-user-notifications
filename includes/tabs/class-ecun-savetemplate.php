@@ -47,8 +47,8 @@ class ECUN_SaveTemplate {
 			<?php
 			delete_transient( 'update_fail' );
 		}
-		$default_subject                   = get_option( 'default_subject' );
-		$default_template                  = get_option( 'default_template' );
+		$default_subject                   = get_option( 'default_subject' ) ? get_option( 'default_subject' ) : '';
+		$default_template                  = get_option( 'default_template' ) ? get_option( 'default_template' ) : '';
 		$subject                           = get_option( 'email_crons_email_subject' ) ? get_option( 'email_crons_email_subject' ) : $default_subject;
 		$content                           = get_option( 'email_crons_email_template_editor_name' ) ? get_option( 'email_crons_email_template_editor_name' ) : $default_template;
 		$customize_variable_preview_check  = get_option( 'customize_variable_preview' ) ? 'checked' : '';
@@ -91,7 +91,7 @@ class ECUN_SaveTemplate {
 							<select name="customize_global_variable_options" id="customize_global_variable_options">
 								<option value="email" <?php echo ( 'email' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Email address' ); ?></option>
 								<option value="first" <?php echo ( 'first' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'First name' ); ?></option>
-								<option value="second" <?php echo ( 'second' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Second name' ); ?></option>
+								<option value="second" <?php echo ( 'second' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Last name' ); ?></option>
 								<option value="nickname" <?php echo ( 'nickname' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Nickname' ); ?></option>
 								<option value="display" <?php echo ( 'display' === $customize_global_variable_options ) ? 'selected' : ''; ?>><?php echo esc_html( 'Display name' ); ?></option>
 							</select>
@@ -116,7 +116,7 @@ class ECUN_SaveTemplate {
 					</p>
 					<hr/>
 					<h2><?php echo esc_html( 'Trivia' ); ?></h2>
-					<p class="description trivia"><?php echo wp_kses_post( "<strong>%USER% :</strong> This global variable can be used anywhere (subject or content) and it will be replaced with the user's data (first name, second name, email, etc). " ); ?><br/><a href="#customize_variable_preview"><?php echo esc_html( 'Check this.' ); ?></a></p>
+					<p class="description trivia"><?php echo wp_kses_post( "<strong>%USER% :</strong> This global variable can be used anywhere (subject or content) and it will be replaced with the user's data (first name, last name, email, etc). " ); ?><br/><a href="#customize_variable_preview"><?php echo esc_html( 'Check this.' ); ?></a></p>
 					<hr>
 				</div>
 			</div>
@@ -130,11 +130,11 @@ class ECUN_SaveTemplate {
 	 * @since 1.0.0
 	 */
 	public function ecun_email_crons_save_template_callback() {
-		if ( isset( $_POST['email_crons_template_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['email_crons_template_nonce'] ), 'email_crons_save_template_nonce_value' ) ) { //phpcs:ignore
+		if ( isset( $_POST['email_crons_template_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['email_crons_template_nonce'] ) ), 'email_crons_save_template_nonce_value' ) ) {
 			$subject                           = isset( $_POST['email_crons_email_subject'] ) ? sanitize_text_field( wp_unslash( $_POST['email_crons_email_subject'] ) ) : '';
 			$content                           = isset( $_POST['email_crons_email_template_editor_name'] ) ? wp_kses_post( wp_unslash( $_POST['email_crons_email_template_editor_name'] ) ) : '';
 			$customize_global_variable_options = isset( $_POST['customize_global_variable_options'] ) ? wp_kses_post( wp_unslash( $_POST['customize_global_variable_options'] ) ) : '';
-			$customize_variable_preview = isset( $_POST['customize_variable_preview'] ) ? $_POST['customize_variable_preview'] : ''; //phpcs:ignore
+			$customize_variable_preview        = isset( $_POST['customize_variable_preview'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_variable_preview'] ) ) : '';
 			if ( ! empty( $subject ) ) {
 				update_option( 'email_crons_email_subject', esc_attr( $subject ) );
 			}
