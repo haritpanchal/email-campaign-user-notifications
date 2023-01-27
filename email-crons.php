@@ -56,3 +56,20 @@ function ecun_email_crons_activate_callback() {
 }
 register_activation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
 register_deactivation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
+
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'salcode_add_plugin_page_settings_link' );
+
+/**
+ * Function add or delete option on plugin activation or deactivation.
+ *
+ * @param string $links global parameter.
+ */
+function salcode_add_plugin_page_settings_link( $links ) {
+	array_unshift(
+		$links,
+		'<a href="' .
+		admin_url( 'admin.php?page=email-crons.php' ) .
+		'">' . __( 'Settings' ) . '</a>',
+	);
+	return $links;
+}
