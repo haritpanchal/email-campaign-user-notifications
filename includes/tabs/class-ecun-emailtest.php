@@ -35,8 +35,8 @@ class ECUN_EmailTest {
 				<p><strong></strong></p>
 			</div>
 			<p><?php echo esc_html( 'Test the email response by adding your email address here.' ); ?></p>
-			<form class="emailForm">
-				<table class="form-table email-crons-email-test" role="presentation">
+			<form method="post" class="emailForm">
+				<table id="email_crons_sent_test_email_form" class="form-table email-crons-email-test" role="presentation">
 					<tbody>
 						<tr>
 							<th scope="row"><label for="email_crons_test_email"><?php echo esc_html( 'Test Email:' ); ?></label></th>

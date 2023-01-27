@@ -16,6 +16,7 @@ require 'tabs/class-ecun-emailtest.php';
 require 'tabs/class-ecun-usersselection.php';
 require 'tabs/class-ecun-cronssettings.php';
 require 'settings/class-ecun-sendemail.php';
+require 'settings/class-ecun-config.php';
 
 /**
  * ECUN_AddMenuPage class
@@ -37,6 +38,8 @@ class ECUN_AddMenuPage {
 	 * @since 1.0.0
 	 */
 	public function ecun_email_crons_register_admin() {
+		global $ecun_tabs;
+
 		$GLOBALS['email-crons-template'] = add_menu_page(
 			'Email Campaign User Notifications',
 			'Email Campaign',
@@ -44,8 +47,21 @@ class ECUN_AddMenuPage {
 			'email-crons.php',
 			array( $this, 'ecun_email_crons_template' ),
 			'dashicons-clock',
-			2
 		);
+
+		foreach ( $ecun_tabs as $key => $value ) {
+			if ( 'email_template' === $key ) {
+				continue;
+			}
+
+			add_submenu_page(
+				'email-crons.php',
+				$value['name'],
+				$value['name'],
+				'manage_options',
+				'?page=email-crons.php&tab=' . esc_attr( $value['tab'] ),
+			);
+		}
 	}
 
 	/**
@@ -77,6 +93,7 @@ class ECUN_AddMenuPage {
 	 * @since 1.0.0
 	 */
 	public function ecun_email_crons_template() {
+		global $ecun_tabs;
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -86,51 +103,45 @@ class ECUN_AddMenuPage {
 		$tab         = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : $default_tab; // phpcs:ignore
 		$screen      = get_current_screen();
 
-		$active_class = '';
-
-		if ( null === $tab ) {
-			$default = 'nav-tab-active';
-		}
-		if ( 'users' === $tab ) {
-			$users = 'nav-tab-active';
-		}
-		if ( 'email-test' === $tab ) {
-			$email_test = 'nav-tab-active';
-		}
-
-		if ( 'cron-settings' === $tab ) {
-			$cron_settings = 'nav-tab-active';
-		}
-
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 			<nav class="nav-tab-wrapper">
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>" class="nav-tab <?php echo esc_attr( $default ); ?>"><?php echo esc_html( 'Email Template' ); ?></a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=users" class="nav-tab <?php echo esc_attr( $users ); ?>"><?php echo esc_html( 'Users Selection' ); ?></a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=cron-settings" class="nav-tab <?php echo esc_attr( $cron_settings ); ?>"><?php echo esc_html( 'Cron Settings' ); ?></a>
-				<a href="?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=email-test" class="nav-tab <?php echo esc_attr( $email_test ); ?>"><?php echo esc_html( 'Test Email ' ); ?></a>
+				<?php
+				foreach ( $ecun_tabs as $key => $value ) {
+					//phpcs:disable 
+					?>
+						<a href= "?page=<?php echo esc_attr( $screen->parent_file ); ?>&tab=<?php echo esc_attr( $value['tab'] ); ?>" 
+						   class="nav-tab <?php echo ( $key === $tab ) ? 'nav-tab-active' : ''; ?>"> 
+								<?php echo esc_html( $value['name'] ); ?>
+						</a>
+					<?php
+					//phpcs:enable 
+				}
+				?>
 			</nav>
 
 			<div class="tab-content">
 				<?php
 				switch ( $tab ) :
-					case 'users':
+					case 'user_selection':
 						$users_selection = new ECUN_UsersSelection();
 						$users_selection->ecun_users_selection_callback();
 						break;
-					case 'cron-settings':
+					case 'cron_settings':
 						$crons_settings = new ECUN_CronsSettings();
 						$crons_settings->ecun_crons_settings_callback();
 						break;
-					case 'email-test':
+					case 'email_test':
 						$email_test = new ECUN_EmailTest();
 						$email_test->ecun_email_test_callback();
 						break;
-					default:
+					case 'email_template':
 						$save_templage = new ECUN_SaveTemplate();
 						$save_templage->ecun_email_crons_email_template_tab_callback();
+						break;
+					default:
 						break;
 				endswitch;
 				?>

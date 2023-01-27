@@ -56,3 +56,30 @@ function ecun_email_crons_activate_callback() {
 }
 register_activation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
 register_deactivation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
+
+add_action( 'init', 'ecun_plugin_init_callback' );
+
+/**
+ * Function to redirect on page load.
+ */
+function ecun_plugin_init_callback() {
+	if ( isset( $_GET['page'] ) ) {
+		$ecun_page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+	}
+	if ( isset( $_GET['tab'] ) ) {
+		$ecun_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
+	}
+
+	if ( ( 'email-crons.php' === $ecun_page ) && 'user_selection' === $ecun_tab ) {
+		?>
+		<script>
+			console.log('here');
+		</script>
+		<?php
+	}
+
+	if ( ( 'email-crons.php' === $ecun_page ) && empty( $ecun_tab ) ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=email_template' ) );
+		exit;
+	}
+}

@@ -88,7 +88,7 @@ class ECUN_UsersSelection {
 			update_option( 'email_crons_roles_chunk', ( $roles ) );
 			set_transient( 'users_selection_update_success', 'users_selection_update_success' );
 		}
-		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=users' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=user_selection' ) );
 		exit;
 	}
 }
