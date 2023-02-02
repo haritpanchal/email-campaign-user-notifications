@@ -35,7 +35,7 @@ class ECUN_SendEmail {
 	 * @param Array $schedules An array of non-default cron schedules.
 	 */
 	public function ecun_email_crons_cron_schedules( $schedules ) {
-		$email_crons_every_cron_time = get_option( 'email_crons_every_cron_time', 'email_crons' ) ? get_option( 'email_crons_every_cron_time', 'email_crons' ) : '';
+		$email_crons_every_cron_time = get_option( 'email_crons_every_cron_time' ) ? get_option( 'email_crons_every_cron_time' ) : '';
 		$minutes                     = $email_crons_every_cron_time ? floor( $email_crons_every_cron_time / 60 ) : '';
 		$display_text                = ( ! empty( $minutes ) && $minutes < 1 ) ? 'Every ' . $email_crons_every_cron_time . ' Seconds' : 'Every ' . $minutes . ' Minutes';
 
