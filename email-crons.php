@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       Email Campaign User Notifications
  * Description:       Description of the plugin.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.1
  * Requires PHP:      8.0.25
  * Author:            Harit Panchal
@@ -51,6 +51,7 @@ function ecun_email_crons_activate_callback() {
 		add_option( 'Activated_Plugin', 'emial-crons' );
 		update_option( 'default_subject', esc_attr( $default_subject ) );
 		update_option( 'default_template', wp_kses_post( $default_template ) );
+		update_option( 'email_crons_roles_chunk', '');
 	}
 	flush_rewrite_rules();
 }
