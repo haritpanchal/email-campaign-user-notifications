@@ -48,20 +48,6 @@ class ECUN_AddMenuPage {
 			array( $this, 'ecun_email_crons_template' ),
 			'dashicons-clock',
 		);
-
-		foreach ( $ecun_tabs as $key => $value ) {
-			if ( 'email_template' === $key ) {
-				continue;
-			}
-
-			add_submenu_page(
-				'email-crons.php',
-				$value['name'],
-				$value['name'],
-				'manage_options',
-				'?page=email-crons.php&tab=' . esc_attr( $value['tab'] ),
-			);
-		}
 	}
 
 	/**
