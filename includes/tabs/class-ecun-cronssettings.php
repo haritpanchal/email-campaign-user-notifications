@@ -101,7 +101,7 @@ class ECUN_CronsSettings {
 				set_transient( 'cron_setting_update_fail', 'cron_setting_update_fail' );
 			}
 		}
-		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=cron-settings' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=cron_settings' ) );
 		exit;
 	}
 }

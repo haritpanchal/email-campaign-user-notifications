@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       Email Campaign User Notifications
  * Description:       Description of the plugin.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.1
  * Requires PHP:      8.0.25
  * Author:            Harit Panchal
@@ -51,12 +51,39 @@ function ecun_email_crons_activate_callback() {
 		add_option( 'Activated_Plugin', 'emial-crons' );
 		update_option( 'default_subject', esc_attr( $default_subject ) );
 		update_option( 'default_template', wp_kses_post( $default_template ) );
+		update_option( 'email_crons_roles_chunk', '');
 	}
 	flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
 register_deactivation_hook( __FILE__, 'ecun_email_crons_activate_callback' );
 
+add_action( 'init', 'ecun_plugin_init_callback' );
+
+/**
+ * Function to redirect on page load.
+ */
+function ecun_plugin_init_callback() {
+	if ( isset( $_GET['page'] ) ) {
+		$ecun_page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+	}
+	if ( isset( $_GET['tab'] ) ) {
+		$ecun_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
+	}
+
+	if ( ( 'email-crons.php' === $ecun_page ) && 'user_selection' === $ecun_tab ) {
+		?>
+		<script>
+			console.log('here');
+		</script>
+		<?php
+	}
+
+	if ( ( 'email-crons.php' === $ecun_page ) && empty( $ecun_tab ) ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=email_template' ) );
+		exit;
+	}
+}
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'salcode_add_plugin_page_settings_link' );
 
 /**

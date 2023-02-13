@@ -106,7 +106,7 @@ class ECUN_SaveTemplate {
 				</div>
 				<div  class="email_crons_save_template_col two">
 					<h2><?php echo esc_html( 'Start Campaign' ); ?></h2>
-					<p><?php echo esc_html( 'Send this email template to all users according to' ); ?> <a href="admin.php?page=email-crons.php&tab=cron-settings"><?php echo esc_html( 'cron settings' ); ?></a> <?php echo esc_html( 'tab.' ); ?>
+					<p><?php echo esc_html( 'Send this email template to all users according to' ); ?> <a href="admin.php?page=email-crons.php&tab=cron_settings"><?php echo esc_html( 'cron settings' ); ?></a> <?php echo esc_html( 'tab.' ); ?>
 					<p class='start_sending_email'>
 						<input type="button" name="start_sending_email_button" id="start_sending_email_button" class="button" value="Send Email to Users" <?php echo esc_attr( $email_crons_progress_check_disabled ); ?>>
 						<?php if ( '1' === $email_crons_progress_check ) { ?>
@@ -149,7 +149,7 @@ class ECUN_SaveTemplate {
 		} else {
 			set_transient( 'update_error', 'update_error' );
 		}
-		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=email-crons.php&tab=email_template' ) );
 		die();
 	}
 }

@@ -1,27 +1,8 @@
 (function ($) {
   jQuery(document).ready(function () {
-    $("#email_crons_users").select2();
     $("#email_crons_roles").select2();
 
-    // if ($("#email_crons_roles").select2("val") !== []) {
-    //   var roles = $("#email_crons_roles").select2("val");
-    //   jQuery.ajax({
-    //     url: localize_variable.ajax_url,
-    //     type: "POST",
-    //     data: {
-    //       action: "email_crons_change_users",
-    //       roles: roles,
-    //     },
-    //     success: function (response) {
-    //       if (response !== null) {
-    //         console.log(response);
-    //         $("#email_crons_users").append(response);
-    //       }
-    //     },
-    //   });
-    // }
-
-    $("#email_crons_sent_test_email").on("click", function () {
+    $("#email_crons_sent_test_email").on("click", function (e) {
       var test_email = jQuery("#email_crons_test_email").val();
       jQuery.ajax({
         url: localize_variable.ajax_url,
@@ -55,6 +36,12 @@
           }, 5000);
         },
       });
+    });
+
+    $("#email_crons_sent_test_email_form").on("keypress", function (e) {
+      if (e.keyCode === 13 || e.keyCode === 32) {
+        return false;
+      }
     });
 
     $("#start_sending_email_button").on("click", function () {
