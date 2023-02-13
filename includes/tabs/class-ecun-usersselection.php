@@ -30,7 +30,7 @@ class ECUN_UsersSelection {
 	 */
 	public function ecun_users_selection_callback() {
 		global $wp_roles;
-		$user_roles              = array_keys( $wp_roles->roles );
+		$user_roles              = count_users();
 		$email_crons_users_nonce = wp_create_nonce( 'email_crons_save_users_nonce_value' );
 		$selected_roles          = get_option( 'email_crons_roles_chunk', true ) ? get_option( 'email_crons_roles_chunk', true ) : '';
 
@@ -54,12 +54,12 @@ class ECUN_UsersSelection {
 							<tr>
 								<select id="email_crons_roles" name="email_crons_roles[]" multiple="multiple" style="width:300px">
 								<?php
-								foreach ( $user_roles as $user_role ) {
+								foreach ( $user_roles['avail_roles'] as $user_role => $count  ) {
 									$selected_roles_label = ( '' !== $selected_roles ) ? ( in_array( $user_role, $selected_roles, true ) ? 'selected' : '' ) : '';
 									?>
-											<option value="<?php echo esc_attr( $user_role ); ?>" <?php echo esc_attr( $selected_roles_label ); ?>>
+											<option value="<?php echo esc_attr( $user_role ); ?>" <?php echo esc_attr( $selected_roles_label ); ?> data-count = <?php echo esc_attr( $count ); ?>>
 											<?php
-											echo esc_attr( $user_role ) . '(' . esc_attr( ucfirst( $user_role ) ) . ')';
+											echo esc_attr( $user_role ) . '(' . esc_attr( ucfirst( $count ) ) . ')';
 											?>
 											</option>
 										<?php
@@ -67,6 +67,7 @@ class ECUN_UsersSelection {
 								?>
 								</select>
 							</tr>
+							<p>Users count: <span id="ecun_users_count">0</span></p>
 						</tbody>
 					</table>
 						<?php

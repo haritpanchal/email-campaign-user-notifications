@@ -75,5 +75,19 @@
         },
       });
     });
+
+    var sum = 0;
+    $("#email_crons_roles option:selected").each(function () {
+      sum = sum + $(this).data("count");
+    });
+    $("#ecun_users_count").html(sum);
+
+    $("#email_crons_roles").change(function () {
+      var sum = 0;
+      $("#email_crons_roles option:selected").each(function () {
+        sum = sum + $(this).data("count");
+      });
+      $("#ecun_users_count").html(sum);
+    });
   });
 })(jQuery);
