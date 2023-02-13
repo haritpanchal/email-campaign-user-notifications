@@ -55,14 +55,16 @@ class ECUN_UsersSelection {
 								<select id="email_crons_roles" name="email_crons_roles[]" multiple="multiple" style="width:300px">
 								<?php
 								foreach ( $user_roles['avail_roles'] as $user_role => $count  ) {
-									$selected_roles_label = ( '' !== $selected_roles ) ? ( in_array( $user_role, $selected_roles, true ) ? 'selected' : '' ) : '';
-									?>
+									if( $user_role !== 'none'){
+										$selected_roles_label = ( '' !== $selected_roles ) ? ( in_array( $user_role, $selected_roles, true ) ? 'selected' : '' ) : '';
+										?>
 											<option value="<?php echo esc_attr( $user_role ); ?>" <?php echo esc_attr( $selected_roles_label ); ?> data-count = <?php echo esc_attr( $count ); ?>>
-											<?php
-											echo esc_attr( $user_role ) . '(' . esc_attr( ucfirst( $count ) ) . ')';
-											?>
+												<?php
+												echo esc_attr( $user_role ) . '(' . esc_attr( ucfirst( $count ) ) . ')';
+												?>
 											</option>
 										<?php
+									}
 								}
 								?>
 								</select>
